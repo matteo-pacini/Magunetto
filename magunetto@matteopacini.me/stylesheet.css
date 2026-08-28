@@ -1,0 +1,6 @@
+/* Colours for the menu come from here so it follows the user's theme rather
+   than hardcoding pixels: the drawing reads them off the theme node. */
+.magunetto-menu {
+    color: #3584e4;
+    background-color: rgba(30, 30, 30, 0.82);
+}

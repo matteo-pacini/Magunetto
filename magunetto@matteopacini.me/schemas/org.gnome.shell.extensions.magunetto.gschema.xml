@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="magunetto@matteopacini.me">
+  <schema id="org.gnome.shell.extensions.magunetto"
+          path="/org/gnome/shell/extensions/magunetto/">
+    <key name="show-radial-menu" type="as">
+      <default><![CDATA[['<Alt>z']]]></default>
+      <summary>Show the radial menu</summary>
+      <description>
+        Shortcut that raises the radial menu. The menu stays up while this
+        shortcut's modifiers are held, and the selection is applied when they
+        are released.
+      </description>
+    </key>
+  </schema>
+</schemalist>

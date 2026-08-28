@@ -1,0 +1,11 @@
+# Compiled from the .gschema.xml at build time, and by hand during development.
+magunetto@matteopacini.me/schemas/gschemas.compiled
+
+# Screenshots and logs from failing harness cases.
+/.harness/
+
+/result
+/result-*
+
+# direnv's nix profile links
+/.direnv/
