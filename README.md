@@ -7,15 +7,14 @@
 Radial window snapping for GNOME Shell. Hold a shortcut, flick the pointer toward a direction, and
 release: the focused window snaps to that region of the screen.
 
-Named for how マグネット (*magunetto*, "magnet") sounds in Japanese. Inspired by
-[Loop](https://github.com/MrKai77/Loop) on macOS, which has no Linux equivalent.
+Inspired by [Loop](https://github.com/MrKai77/Loop) on macOS.
 
 ## How it works
 
 ![Snapping a window to every sector in turn](assets/demo.gif)
 
-Hold **Alt** and tap **Z**. A radial menu appears where the pointer is. Keep Alt held and
-move the mouse:
+Hold **Alt** and tap **Z**. A radial menu appears where the pointer is. Keep Alt held and move the
+mouse:
 
 ```
                   top
@@ -29,82 +28,97 @@ move the mouse:
                  bottom
 ```
 
-Direction decides the sector, distance decides the band: stay near the centre and nothing is
-selected, move a little for the centre action, move further for a direction. Release Alt to
-snap, or press **Escape** to cancel.
+Direction picks the sector, distance picks the band: near the centre nothing is selected, a little
+further selects the centre action, further still selects a direction. Release Alt to snap, Escape to
+cancel.
 
-Selection follows the *direction* you moved, not where the pointer landed, so you can flick well
-past the menu and still hit the sector you aimed at.
+Selection follows the direction you moved, not where the pointer landed, so you can flick past the
+menu and still hit the sector you aimed at.
 
 ## Requirements
 
-GNOME Shell **50**, on Wayland. GNOME 50 has no X11 session — mutter dropped the X11 backend, and
-`gnome-shell` no longer takes an `--x11` flag. Windows belonging to X11 applications run under
-XWayland and are managed by mutter like any other, so they should snap the same way; that path is
-not covered by the tests.
-
-This extension targets one GNOME version deliberately. Each GNOME major release gets its own branch
-and tag; the GNOME 50 tag keeps working on GNOME 50 after later branches exist. There are no
-version guards in the code, which is what keeps it readable.
-
-Window management on Wayland is only possible from inside the compositor, so this is a GNOME Shell
-extension rather than an application. No external program can move another program's window.
+GNOME Shell **50**, on Wayland. Later GNOME releases are supported on their own branches and tags.
 
 ## Install
 
-With Nix flakes — add the input, then install the package:
-
-```nix
-{
-  inputs.magunetto.url = "github:matteo-pacini/Magunetto";
-
-  # in your NixOS or home-manager configuration:
-  environment.systemPackages = [ inputs.magunetto.packages.${pkgs.system}.default ];
-}
-```
-
-From a checkout, for development:
+Download `magunetto@matteopacini.me.shell-extension.zip` from the
+[latest release](https://github.com/matteo-pacini/Magunetto/releases/latest):
 
 ```sh
-ln -sfn "$PWD/magunetto@matteopacini.me" \
-        ~/.local/share/gnome-shell/extensions/magunetto@matteopacini.me
-glib-compile-schemas magunetto@matteopacini.me/schemas/
+gnome-extensions install --force magunetto@matteopacini.me.shell-extension.zip
 ```
 
-Either way, log out and back in: the shell only scans for newly installed extensions at startup,
-and Wayland has no way to restart it in place. Then enable it:
+Log out and back in, then:
 
 ```sh
 gnome-extensions enable magunetto@matteopacini.me
 ```
 
-To iterate without logging out, use `tests/harness/watch.sh` (see below) — it loads the extension
-into a nested shell that starts and stops in seconds.
+### Nix
+
+Add the flake input:
+
+```nix
+{
+  inputs.magunetto.url = "github:matteo-pacini/Magunetto";
+}
+```
+
+Then install the package on NixOS:
+
+```nix
+{
+  environment.systemPackages = [ inputs.magunetto.packages.${pkgs.system}.default ];
+  programs.dconf.enable = true;
+}
+```
+
+### Home Manager
+
+Install the package and enable it declaratively, so the extension and its shortcut are part of your
+configuration:
+
+```nix
+{
+  home.packages = [ inputs.magunetto.packages.${pkgs.system}.default ];
+
+  dconf.settings = {
+    "org/gnome/shell" = {
+      enabled-extensions = [ "magunetto@matteopacini.me" ];
+    };
+
+    "org/gnome/shell/extensions/magunetto" = {
+      show-radial-menu = [ "<Alt>z" ];
+    };
+  };
+}
+```
+
+Log out and back in after the first activation: the shell only scans for new extensions at startup.
 
 ## Changing the shortcut
 
-Open the extension's preferences (`gnome-extensions prefs magunetto@matteopacini.me`) and click the
-shortcut row.
+Run `gnome-extensions prefs magunetto@matteopacini.me` and click the shortcut row, or set
+`show-radial-menu` as shown above.
 
-The shortcut needs at least one modifier, because releasing that modifier is what commits the
-selection. A shortcut without one still works, but can only be dismissed by a timeout.
+Two constraints:
 
-The default is `<Alt>z`: one modifier, nothing else in GNOME claims it, and it is
-reachable one-handed. `<Alt>space` would read more naturally but GNOME binds it to the
-window menu, so it does nothing until that binding is cleared.
+- The shortcut needs at least one modifier. Releasing that modifier is what applies the selection;
+  without one, the menu can only close on a timeout.
+- Super cannot be used. Holding it puts the shell into overview mode, where the shortcut stops
+  matching.
 
-**Avoid Super.** Pressing Super puts the shell into overview mode, and shortcuts registered for
-normal mode stop matching while it is held. Ctrl and Alt are reliable.
+`<Alt>space` is bound to GNOME's window menu and does nothing until that binding is cleared.
 
 ## Development
 
 ```sh
-nix develop              # tools: gnome-shell, gjs, node, glib, gtk4
+nix develop
 
-tests/run-all.sh         # unit tests + headless harness
-tests/run-all.sh --vm    # also the NixOS virtual-machine test
+tests/run-all.sh         # unit tests and the headless harness
+tests/run-all.sh --vm    # adds the NixOS virtual-machine test
 
-node --test tests/*.test.js                # gesture maths only, milliseconds
+node --test tests/*.test.js                # gesture maths, no shell required
 dbus-run-session -- tests/harness/run.sh   # harness only
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases
 
@@ -112,15 +126,11 @@ tests/harness/watch.sh   # nested shell in a window, to drive the menu by hand
 ```
 
 The harness boots a headless GNOME Shell with a virtual monitor, loads the extension, injects
-synthetic input, and asserts on the extension's own state trace and the resulting window geometry.
+synthetic input, and asserts on the extension's state trace and the resulting window geometry.
 Screenshots and logs from failing cases land in `.harness/`.
 
-Each session runs under a throwaway home *and* forces `GSETTINGS_BACKEND=keyfile`. Both matter:
-overriding `HOME` alone is not enough, because GSettings otherwise reaches the running dconf
-service over the session bus and writes land in your real desktop configuration.
-
-Assertions are on state, not pixels. The one exception is the overlay case, which compares
-screenshots of different selections against each other to prove the menu actually redraws.
+Sessions run under a throwaway home with `GSETTINGS_BACKEND=keyfile`, which keeps every setting
+written during a test inside that directory.
 
 ### Layout
 
@@ -128,10 +138,10 @@ screenshots of different selections against each other to prove the menu actuall
 magunetto@matteopacini.me/
   extension.js          keybinding, gesture lifecycle, state log
   prefs.js              shortcut preference
-  stylesheet.css        menu colours, read off the theme node
-  schemas/              GSettings schema; the shortcut lives here as a default
-  lib/geometry.js       sector and rectangle maths - imports nothing
-  lib/radialMenu.js     modal grab, release detection, Cairo drawing
+  stylesheet.css        menu colours
+  schemas/              GSettings schema, including the default shortcut
+  lib/geometry.js       sector and rectangle maths, no imports
+  lib/radialMenu.js     modal grab, release detection, drawing
   lib/snap.js           target eligibility and applying geometry
   lib/testInterface.js  test-only D-Bus surface, gated on MAGUNETTO_TEST
 tests/
@@ -139,16 +149,13 @@ tests/
   run-all.sh            every tier in one command
   nixos-test.nix        virtual-machine test
   harness/run.sh        boots headless sessions, runs the cases
-  harness/lib.sh        assertions and gesture helpers used by cases
+  harness/lib.sh        assertions and gesture helpers
   harness/cases/        one file per behaviour under test
   harness/testwindow.js a window with predictable size constraints
   harness/watch.sh      nested shell for driving the menu by hand
 package.nix             the extension derivation
 flake.nix               devShell, package, and the vm check
 ```
-
-`lib/geometry.js` imports nothing on purpose: it is the only part testable without a compositor, so
-it holds everything that can be tested that way.
 
 ## Licence
 
