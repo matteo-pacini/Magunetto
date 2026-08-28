@@ -1,4 +1,6 @@
-<img src="assets/icon.png" alt="Magunetto" width="128" align="right">
+<p align="center">
+  <img src="assets/icon.png" alt="Magunetto" width="160">
+</p>
 
 # Magunetto
 
