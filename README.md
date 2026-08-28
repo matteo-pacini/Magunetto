@@ -157,6 +157,27 @@ package.nix             the extension derivation
 flake.nix               devShell, package, and the vm check
 ```
 
+## Contributing
+
+Contributions are welcome — issues, bug reports, and pull requests alike.
+
+Behaviour changes are spec-driven. The contract lives in `openspec/specs/`, and a change starts
+there rather than in the code: propose it with OpenSpec, write the requirements and scenarios, then
+implement. Each scenario should end up with a matching case in `tests/harness/cases/`.
+
+Run `tests/run-all.sh` before opening a pull request, and include the result. Every tier must pass.
+
+### AI-assisted contributions
+
+Accepted, on the same terms as any other contribution:
+
+- Follow [AGENTS.md](AGENTS.md) (symlinked as `CLAUDE.md`). It carries the project's constraints and
+  the traps that are easy to fall into.
+- Keep the spec-driven flow: specs before implementation.
+- Run the tests and confirm they pass. Do not submit work that has not been run.
+
+You are responsible for what you submit, whether or not a model wrote it.
+
 ## Licence
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
