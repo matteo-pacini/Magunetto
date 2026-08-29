@@ -11,7 +11,7 @@ Inspired by [Loop](https://github.com/MrKai77/Loop) on macOS.
 
 ## How it works
 
-![Snapping a window to every sector in turn](assets/demo.gif)
+![The region outlined as each sector is chosen, and the window snapping to it](assets/demo.gif)
 
 Hold **Alt** and tap **Z**. A radial menu appears where the pointer is. Keep Alt held and move the
 mouse:
@@ -32,11 +32,15 @@ Direction picks the sector, distance picks the band: near the centre nothing is 
 further selects the centre action, further still selects a direction. Release Alt to snap, Escape to
 cancel.
 
+As you move, the region you would get is outlined on screen. Nothing is outlined while you are in
+the dead zone, because releasing there would leave the window where it is — so the outline is also
+the answer to whether you have selected anything at all.
+
 Selection follows the direction you moved, not where the pointer landed, so you can flick past the
 menu and still hit the sector you aimed at.
 
-The window travels to its region rather than appearing there. That can be turned off, and the style
-of the travel can be changed — see [Snapping](#snapping) below.
+The window travels to its region rather than appearing there. The outline, the travel, and the style
+of the travel can each be changed — see [Snapping](#snapping) below.
 
 ## Requirements
 
@@ -92,6 +96,7 @@ configuration:
 
     "org/gnome/shell/extensions/magunetto" = {
       show-radial-menu = [ "<Alt>z" ];
+      snap-preview = true;
       snap-animation = true;
       snap-animation-curve = "quint";
     };
@@ -117,8 +122,13 @@ Two constraints:
 
 ## Snapping
 
-Run `gnome-extensions prefs magunetto@matteopacini.me`. Two settings govern how a window reaches its
-region; where it ends up is not affected by either.
+Run `gnome-extensions prefs magunetto@matteopacini.me`. Three settings govern what you see of a
+snap; where the window ends up is not affected by any of them.
+
+**Preview** (`snap-preview`, on by default) — whether the region is outlined while the menu is up.
+Unlike the two below, this is not suppressed when the desktop is set not to animate: the outline
+still appears, it just stops sliding into place. Where a window will land is information rather than
+decoration.
 
 **Animate** (`snap-animation`, on by default) — whether the window is seen to travel, or simply
 appears in its region.
@@ -142,8 +152,8 @@ than how long it takes.
 The duration is fixed. A style and a duration are not independent — a sharp style needs longer than
 a soft one to read the same way — so only the style is offered.
 
-Snapping is immediate whatever these say if the desktop itself is set not to animate
-(`org.gnome.desktop.interface enable-animations`).
+The travel is immediate whatever Animate and Style say if the desktop itself is set not to animate
+(`org.gnome.desktop.interface enable-animations`). The outline is not affected, as above.
 
 ## Translations
 
@@ -175,6 +185,9 @@ dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases
 
 tests/harness/watch.sh   # nested shell in a window, to drive the menu by hand
 ```
+
+The nested shell binds **Alt+X**, not Alt+Z: whatever the compositor outside matches is consumed
+before it reaches the nested window, so a copy installed on the desktop would swallow the shortcut.
 
 The harness boots a headless GNOME Shell with a virtual monitor, loads the extension, and asserts on
 its state trace and the resulting window geometry. Screenshots and logs from failing cases land in
