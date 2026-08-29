@@ -18,7 +18,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "gnome-shell-extension-magunetto";
-  version = "0.4.1";
+  version = "0.4.2";
 
   # The directory is named after the UUID, whose "@" is not allowed in a store
   # path name, so the source is given an explicit name.
