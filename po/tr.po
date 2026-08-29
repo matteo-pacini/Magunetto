@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
 "Language-Team: Turkish <https://github.com/matteo-pacini/Magunetto/issues>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -17,39 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "Dairesel menü kısayolu"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "Menüyü açmak için basılı tutun, yaslamak için bırakın"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "Yaslama"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "Ön izleme"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "Menü açıkken hedef bölgeyi çerçeveyle göster"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "Canlandır"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "Pencerenin yeni bölgesine gidişini göster"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "Biçim"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "Bir kısayola basın"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "Kısayol, bir değiştirici tuş içermelidir."
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "İptal"
 
@@ -107,7 +116,8 @@ msgstr "Taşan"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:66
 msgid "Slides past the target and comes back, briefly exceeding its region."
-msgstr "Hedefin ötesine kayıp geri döner, bu sırada bölgesini kısa süreliğine taşar."
+msgstr ""
+"Hedefin ötesine kayıp geri döner, bu sırada bölgesini kısa süreliğine taşar."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
 msgid "Show the radial menu"
@@ -123,10 +133,22 @@ msgstr ""
 "tutulduğu sürece açık kalır ve bu tuşlar bırakıldığında seçim uygulanır."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Preview the region"
+msgstr "Bölgeyi ön izle"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr ""
+"Menü açıkken pencerenin yerleştirileceği bölgenin çerçeveyle gösterilip "
+"gösterilmeyeceği; böylece seçim yapılmadan önce görülebilir."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
 msgstr "Yaslamayı canlandır"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
 msgid ""
 "Whether a snapped window is seen to travel from where it was into its new "
 "region, or simply appears there."
@@ -134,11 +156,11 @@ msgstr ""
 "Yaslanan pencerenin bulunduğu yerden yeni bölgesine gidişinin görünüp "
 "görünmeyeceği; görünmezse pencere doğrudan orada belirir."
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "Gidiş biçimi"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "

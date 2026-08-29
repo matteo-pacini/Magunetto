@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
 "Language-Team: Italian <https://github.com/matteo-pacini/Magunetto/issues>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -17,39 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "Scorciatoia menù radiale"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "Tenerla premuta per aprire il menù, rilasciarla per agganciare"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "Aggancio"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "Anteprima"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "Mostra il contorno dell'area mentre il menù è visibile"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "Animazione"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "Mostra la finestra mentre si sposta nella nuova area"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "Stile"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "Premere una scorciatoia"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "La scorciatoia deve includere un tasto modificatore."
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "Annulla"
 
@@ -67,7 +76,8 @@ msgstr "Scattante"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:37
 msgid "Most of the move happens at once, then it settles."
-msgstr "Gran parte del movimento avviene in un istante, poi la finestra si assesta."
+msgstr ""
+"Gran parte del movimento avviene in un istante, poi la finestra si assesta."
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:42
 msgid "Settle"
@@ -99,7 +109,8 @@ msgstr "Elastico"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:60
 msgid "Overshoots as it slides, but never grows past its region."
-msgstr "Supera la meta scivolando, ma non si ingrandisce mai oltre la propria area."
+msgstr ""
+"Supera la meta scivolando, ma non si ingrandisce mai oltre la propria area."
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:65
 msgid "Overshoot"
@@ -107,7 +118,9 @@ msgstr "Rimbalzo"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:66
 msgid "Slides past the target and comes back, briefly exceeding its region."
-msgstr "Scivola oltre la meta e torna indietro, superando per un istante la propria area."
+msgstr ""
+"Scivola oltre la meta e torna indietro, superando per un istante la propria "
+"area."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
 msgid "Show the radial menu"
@@ -124,10 +137,23 @@ msgstr ""
 "applicata al loro rilascio."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Preview the region"
+msgstr "Anteprima dell'area"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr ""
+"Indica se il contorno dell'area che verrebbe assegnata a una finestra sia "
+"mostrato mentre il menù è visibile, in modo da poter vedere la scelta prima "
+"di compierla."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
 msgstr "Anima l'aggancio"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
 msgid ""
 "Whether a snapped window is seen to travel from where it was into its new "
 "region, or simply appears there."
@@ -135,11 +161,11 @@ msgstr ""
 "Indica se una finestra agganciata venga mostrata mentre si sposta dalla "
 "posizione precedente alla nuova area, oppure vi compaia semplicemente."
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "Stile del movimento"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "

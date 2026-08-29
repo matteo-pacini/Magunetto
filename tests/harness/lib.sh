@@ -359,6 +359,7 @@ flick() { move_pointer "$1" "$2"; }
 
 work_area_field() { mg_rect WorkArea | cut -d' ' -f"$1"; }
 frame_field()     { mg_rect TargetFrame | cut -d' ' -f"$1"; }
+preview_field()   { mg_rect PreviewRect | cut -d' ' -f"$1"; }
 
 # The work area of a named monitor. A cross-monitor assertion cannot use
 # work_area_field: the hook derives WorkArea from the target window's monitor, so

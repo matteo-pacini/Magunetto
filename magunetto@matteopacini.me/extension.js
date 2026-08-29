@@ -1,14 +1,16 @@
 import Meta from 'gi://Meta';
+import Mtk from 'gi://Mtk';
 import Shell from 'gi://Shell';
 
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import {TilePreview} from 'resource:///org/gnome/shell/ui/windowManager.js';
 
 import {cancelAll} from './lib/animate.js';
 import {curveFor} from './lib/curves.js';
-import {NONE} from './lib/geometry.js';
+import {NONE, rectFor} from './lib/geometry.js';
 import {RadialMenu} from './lib/radialMenu.js';
-import {isSnappable, snap, stillExists} from './lib/snap.js';
+import {isSnappable, snap, stillExists, workAreaFor} from './lib/snap.js';
 
 const KEYBINDING = 'show-radial-menu';
 
@@ -25,6 +27,8 @@ export default class MagunettoExtension extends Extension {
         this._closing = null;
         this._targetWindow = null;
         this._gestureMonitor = null;
+        this._preview = null;
+        this._previewEnabled = false;
         this._settings = this.getSettings();
 
         const action = Main.wm.addKeybinding(
@@ -51,6 +55,11 @@ export default class MagunettoExtension extends Extension {
         // A travel outlives the gesture that started it, and holds a timeout, a
         // frozen actor and a widget in the shell's own group.
         cancelAll();
+
+        // close() only hides it; the widget stays parented to the shell's own
+        // window group until something destroys it.
+        this._preview?.destroy();
+        this._preview = null;
 
         Main.wm.removeKeybinding(KEYBINDING);
 
@@ -92,6 +101,12 @@ export default class MagunettoExtension extends Extension {
         return this._menu?.isGrabHeld ?? false;
     }
 
+    // The preview is drawn and nothing else, so tests have no other way to see
+    // it: it moves no window and writes nothing to the log.
+    get preview() {
+        return this._preview;
+    }
+
     _onTrigger(display, window, event, binding) {
         if (this._menu) {
             this.record('already-open');
@@ -117,10 +132,15 @@ export default class MagunettoExtension extends Extension {
         const monitor = Main.layoutManager.findMonitorForPoint(pointerX, pointerY);
         this._gestureMonitor = monitor ? monitor.index : target.get_monitor();
 
+        // Read as the gesture starts rather than cached, so a preference change
+        // applies to the next gesture without reloading the extension.
+        this._previewEnabled = this._settings.get_boolean('snap-preview');
+
         const menu = new RadialMenu({
             monitorIndex: this._gestureMonitor,
             mask: binding.get_mask(),
             record: this.record.bind(this),
+            onSelect: this._onSelect.bind(this),
             onFinish: this._onFinish.bind(this),
             onGone: () => {
                 if (this._closing === menu)
@@ -138,12 +158,51 @@ export default class MagunettoExtension extends Extension {
         this.record('overlay-up');
     }
 
+    // The preview belongs here rather than to the menu: opening it needs the
+    // target window, and reaching that from radialMenu.js would pull snap.js —
+    // and through it animate.js and Meta — into a module that imports nothing
+    // but the geometry maths.
+    _onSelect(sector) {
+        if (!this._previewEnabled)
+            return;
+
+        const rect = rectFor(sector, workAreaFor(this._gestureMonitor));
+        if (!rect) {
+            // rectFor answers null for the dead zone, which is exactly when
+            // releasing would place nothing and so nothing should be shown.
+            this._preview?.close();
+            return;
+        }
+
+        // close() only fades and hides, leaving the widget parented to the
+        // shell's window group, so one instance is kept and reused rather than
+        // built per gesture. This is the shell's own pattern for it.
+        this._preview ??= new TilePreview();
+
+        // TilePreview compares rectangles with Mtk's own equal(), so a plain
+        // object cannot be passed. geometry.js stays free of any toolkit import
+        // by being unit-tested outside a shell, which makes this the boundary.
+        this._preview.open(this._targetWindow, new Mtk.Rectangle(rect),
+            this._gestureMonitor);
+
+        // open() ends by lowering the preview below the window actor, which suits
+        // the shell showing where a window being dragged will land. This gesture
+        // leaves the window where it is, so a region overlapping it would hide the
+        // outline entirely. Raised after every open, not once: open() lowers it
+        // again on each selection change.
+        global.window_group.set_child_above_sibling(this._preview, null);
+    }
+
     _onFinish(sector) {
         // The menu reports itself finished as the fade starts, not when it ends,
         // so it is no longer the open one but is still on screen. Held until it
         // is really gone, so disable() can cut the fade short.
         this._closing = this._menu;
         this._menu = null;
+
+        // Committed or abandoned, the gesture is over and the region it was
+        // offering is no longer a question.
+        this._preview?.close();
 
         const target = this._targetWindow;
         if (sector === NONE) {

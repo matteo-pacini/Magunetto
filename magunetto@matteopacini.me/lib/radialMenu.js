@@ -114,7 +114,7 @@ class RadialArea extends St.DrawingArea {
 
 export const RadialMenu = GObject.registerClass(
 class RadialMenu extends St.Widget {
-    _init({monitorIndex, mask, record, onFinish, onGone}) {
+    _init({monitorIndex, mask, record, onSelect, onFinish, onGone}) {
         const geometry = global.display.get_monitor_geometry(monitorIndex);
 
         super._init({
@@ -127,6 +127,7 @@ class RadialMenu extends St.Widget {
         });
 
         this._record = record;
+        this._onSelect = onSelect;
         this._onFinish = onFinish;
         this._onGone = onGone;
         this._mask = mask;
@@ -220,6 +221,7 @@ class RadialMenu extends St.Widget {
             this._sector = sector;
             this._area.setSector(sector);
             this._record(`select:${sector}`);
+            this._onSelect(sector);
         }
 
         return Clutter.EVENT_STOP;

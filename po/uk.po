@@ -7,10 +7,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
-"Language-Team: Ukrainian <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
+"Language-Team: Ukrainian <https://github.com/matteo-pacini/Magunetto/"
+"issues>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,39 +20,47 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "Скорочення радіального меню"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "Утримуйте, щоб показати меню, відпустіть, щоб прикріпити вікно"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "Прикріплення"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "Попередній перегляд"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "Показувати контур ділянки, доки меню відкрите"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "Анімувати"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "Показувати, як вікно рухається до нової ділянки"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "Стиль"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "Натисніть скорочення"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "Скорочення має містити клавішу-модифікатор."
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -68,7 +78,8 @@ msgstr "Різкий"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:37
 msgid "Most of the move happens at once, then it settles."
-msgstr "Більша частина шляху долається одразу, а потім вікно спокійно стає на місце."
+msgstr ""
+"Більша частина шляху долається одразу, а потім вікно спокійно стає на місце."
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:42
 msgid "Settle"
@@ -108,7 +119,8 @@ msgstr "Перельот"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:66
 msgid "Slides past the target and comes back, briefly exceeding its region."
-msgstr "Проковзує повз ціль і повертається, на мить виходячи за межі своєї ділянки."
+msgstr ""
+"Проковзує повз ціль і повертається, на мить виходячи за межі своєї ділянки."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
 msgid "Show the radial menu"
@@ -121,14 +133,26 @@ msgid ""
 "released."
 msgstr ""
 "Скорочення, яке викликає радіальне меню. Меню лишається на екрані, доки "
-"утримуються модифікатори цього скорочення, а вибір застосовується після "
-"їх відпускання."
+"утримуються модифікатори цього скорочення, а вибір застосовується після їх "
+"відпускання."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Preview the region"
+msgstr "Попередній перегляд ділянки"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr ""
+"Чи окреслюється контуром ділянка, яку отримає вікно, доки меню відкрите, "
+"щоб вибір було видно ще до його підтвердження."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
 msgstr "Анімувати прикріплення"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
 msgid ""
 "Whether a snapped window is seen to travel from where it was into its new "
 "region, or simply appears there."
@@ -136,11 +160,11 @@ msgstr ""
 "Чи видно, як прикріплене вікно рухається з попереднього місця до нової "
 "ділянки, чи воно просто з’являється там."
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "Стиль руху"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "

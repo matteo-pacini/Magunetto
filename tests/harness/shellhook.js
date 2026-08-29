@@ -56,6 +56,9 @@ const INTERFACE = `
     <method name="ActorTransform">
       <arg type="(dddd)" direction="out" name="transform"/>
     </method>
+    <method name="PreviewRect">
+      <arg type="(iiii)" direction="out" name="rect"/>
+    </method>
     <method name="ClearLog"/>
     <property name="Log" type="s" access="read"/>
     <property name="OverlayUp" type="b" access="read"/>
@@ -129,6 +132,18 @@ export class TestInterface {
             return NO_TRANSFORM;
 
         return [actor.translation_x, actor.translation_y, actor.scale_x, actor.scale_y];
+    }
+
+    // The preview changes neither the state log nor any window's geometry, so
+    // this is the only way a case can see it. It reports where the widget
+    // actually is, not where it was told to go: the widget eases into place, so
+    // a target would answer correctly even if nothing were ever drawn.
+    PreviewRect() {
+        const preview = this._extension.preview;
+        if (!preview || !preview.visible)
+            return EMPTY_RECT;
+
+        return [preview.x, preview.y, preview.width, preview.height];
     }
 
     TargetFrame() {

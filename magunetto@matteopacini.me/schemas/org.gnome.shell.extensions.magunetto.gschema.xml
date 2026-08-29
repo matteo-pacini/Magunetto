@@ -11,6 +11,14 @@
         are released.
       </description>
     </key>
+    <key name="snap-preview" type="b">
+      <default>true</default>
+      <summary>Preview the region</summary>
+      <description>
+        Whether the region a window would be given is outlined while the menu is
+        up, so the choice can be seen before it is made.
+      </description>
+    </key>
     <key name="snap-animation" type="b">
       <default>true</default>
       <summary>Animate snapping</summary>

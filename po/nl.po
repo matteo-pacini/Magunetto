@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
 "Language-Team: Dutch <https://github.com/matteo-pacini/Magunetto/issues>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -17,39 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "Sneltoets voor het radiale menu"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "Ingedrukt houden opent het menu, loslaten klikt het venster vast"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "Vastklikken"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "Voorbeeld"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "Het gebied omlijnen zolang het menu zichtbaar is"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "Animeren"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "Het venster onderweg naar zijn nieuwe gebied tonen"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "Stijl"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "Druk op een sneltoets"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "De sneltoets moet een bewerktoets bevatten."
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -101,8 +110,7 @@ msgstr "Verend"
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:60
 msgid "Overshoots as it slides, but never grows past its region."
-msgstr ""
-"Schiet tijdens het glijden door, maar groeit nooit buiten zijn gebied."
+msgstr "Schiet tijdens het glijden door, maar groeit nooit buiten zijn gebied."
 
 #: magunetto@matteopacini.me/lib/curveInfo.js:65
 msgid "Overshoot"
@@ -129,10 +137,22 @@ msgstr ""
 "de selectie toegepast."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Preview the region"
+msgstr "Voorbeeld van het gebied tonen"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr ""
+"Of het gebied dat een venster zou krijgen omlijnd wordt zolang het menu "
+"zichtbaar is, zodat de keuze te zien is voordat ze wordt gemaakt."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
 msgstr "Vastklikken animeren"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
 msgid ""
 "Whether a snapped window is seen to travel from where it was into its new "
 "region, or simply appears there."
@@ -140,11 +160,11 @@ msgstr ""
 "Of een vastgeklikt venster zichtbaar van zijn oude plaats naar zijn nieuwe "
 "gebied beweegt, of daar zonder meer verschijnt."
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "Bewegingsstijl"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "

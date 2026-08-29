@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
 "Language-Team: Japanese <https://github.com/matteo-pacini/Magunetto/issues>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -17,39 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "ラジアルメニューのショートカット"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "押し続けるとメニューを表示、離すとスナップ"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "スナップ"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "プレビュー"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "メニューの表示中に領域を枠線で示す"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "アニメーション"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "ウィンドウが新しい領域へ移動する様子を見せる"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "スタイル"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "ショートカットキーを押してください"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "ショートカットには修飾キーを含める必要があります。"
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -119,31 +128,44 @@ msgid ""
 "shortcut's modifiers are held, and the selection is applied when they are "
 "released."
 msgstr ""
-"ラジアルメニューを表示するショートカットです。このショートカットの修飾キーを押"
-"している間はメニューが表示されたままになり、離すと選択した内容が適用されます。"
+"ラジアルメニューを表示するショートカットです。このショートカットの修飾キーを"
+"押している間はメニューが表示されたままになり、離すと選択した内容が適用されま"
+"す。"
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Preview the region"
+msgstr "領域をプレビューする"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr ""
+"メニューの表示中に、ウィンドウが割り当てられる領域を枠線で示すかどうかを設"
+"定します。これにより、決定する前に選択内容を確認できます。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
 msgstr "スナップをアニメーションする"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
 msgid ""
 "Whether a snapped window is seen to travel from where it was into its new "
 "region, or simply appears there."
 msgstr ""
-"スナップしたウィンドウを、元の位置から新しい領域へ移動していく様子として見せる"
-"か、単に移動先へ表示するかを設定します。"
+"スナップしたウィンドウを、元の位置から新しい領域へ移動していく様子として見せ"
+"るか、単に移動先へ表示するかを設定します。"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "移動スタイル"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
 "falls back to \"quint\"."
 msgstr ""
 "ウィンドウが領域へ向かうときの動き方です。「expo」、「quint」、「md」、"
-"「cubic」、「quad」、「spring」、「back」のいずれかを指定します。認識できない値"
-"は「quint」として扱われます。"
+"「cubic」、「quad」、「spring」、「back」のいずれかを指定します。認識できない"
+"値は「quint」として扱われます。"

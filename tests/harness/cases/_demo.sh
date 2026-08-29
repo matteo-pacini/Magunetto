@@ -34,7 +34,10 @@ case_body() {
         begin_gesture
         sleep 0.25
         sweep "$1" "$2"
-        sleep 0.35
+        # The preview eases into its region over about a quarter of a second, so a
+        # shorter dwell than this releases while the outline is still arriving and
+        # it is never seen at rest — which is the thing the tour is showing.
+        sleep 0.6
         release_gesture
         # Long enough for the 220ms travel to play out and be seen to land.
         sleep 0.9

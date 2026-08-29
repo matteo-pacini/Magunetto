@@ -1,7 +1,7 @@
 # Translating Magunetto
 
-Twenty-nine strings, about two hundred words. The source language is **British English**; American
-English is a catalogue like any other.
+Thirty-three strings, about two hundred and thirty words. The source language is **British
+English**; American English is a catalogue like any other.
 
 ## What the extension does
 
@@ -22,6 +22,9 @@ descriptions that `dconf-editor` and `gsettings describe` show.
   |   Hold to raise the menu, release to snap                    |  <- row subtitle
   |                                                              |
   |   Snapping                                                   |  <- group heading
+  |  +--------------------------------------------------------+  |
+  |  | Preview                                        ( o__)  |  |  <- row title
+  |  | Outline the region while the menu is up                |  |  <- row subtitle
   |  +--------------------------------------------------------+  |
   |  | Animate                                        ( o__)  |  |  <- row title
   |  | Show the window travelling to its new region           |  |  <- row subtitle
@@ -49,6 +52,8 @@ descriptions that `dconf-editor` and `gsettings describe` show.
 | `Radial menu shortcut` | row title | 2–4 words |
 | `Hold to raise the menu, release to snap` | row subtitle | one clause, no full stop |
 | `Snapping` | group heading | one word |
+| `Preview` | switch row title | one word, a noun |
+| `Outline the region while the menu is up` | row subtitle | one clause, no full stop |
 | `Animate` | switch row title | one word, a verb |
 | `Show the window travelling to its new region` | row subtitle | one clause, no full stop |
 | `Style` | row title | one word |
@@ -80,7 +85,7 @@ rest. *Spring* and *Overshoot* both go past the destination and come back; the d
 
 ### The settings descriptions
 
-Seen only in `dconf-editor` and `gsettings describe`. Three summaries and three descriptions, in a
+Seen only in `dconf-editor` and `gsettings describe`. Four summaries and four descriptions, in a
 plainer register than the dialog — these are documentation, not interface.
 
 ## Rules

@@ -7,6 +7,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
 import {CURVES, CURVE_KEYS, DEFAULT_CURVE} from './lib/curveInfo.js';
 
 const KEY = 'show-radial-menu';
+const PREVIEW_KEY = 'snap-preview';
 const ANIMATION_KEY = 'snap-animation';
 const CURVE_KEY = 'snap-animation-curve';
 
@@ -52,6 +53,16 @@ export default class MagunettoPreferences extends ExtensionPreferences {
 
     _snapGroup(settings) {
         const group = new Adw.PreferencesGroup({title: this.gettext('Snapping')});
+
+        // The rows are in the order the gesture meets them: the region is
+        // outlined while choosing, the window travels once chosen, and the style
+        // says how it travels.
+        const preview = new Adw.SwitchRow({
+            title: this.gettext('Preview'),
+            subtitle: this.gettext('Outline the region while the menu is up'),
+        });
+        settings.bind(PREVIEW_KEY, preview, 'active', Gio.SettingsBindFlags.DEFAULT);
+        group.add(preview);
 
         const animate = new Adw.SwitchRow({
             title: this.gettext('Animate'),

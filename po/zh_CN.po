@@ -7,48 +7,58 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"POT-Creation-Date: 2026-08-29 22:57+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
-"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
-"Language-Team: Simplified Chinese <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
+"Language-Team: Simplified Chinese <https://github.com/matteo-pacini/"
+"Magunetto/issues>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: magunetto@matteopacini.me/prefs.js:29
+#: magunetto@matteopacini.me/prefs.js:30
 msgid "Radial menu shortcut"
 msgstr "环形菜单快捷键"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:31
 msgid "Hold to raise the menu, release to snap"
 msgstr "按住呼出菜单，松开完成吸附"
 
-#: magunetto@matteopacini.me/prefs.js:54
+#: magunetto@matteopacini.me/prefs.js:55
 msgid "Snapping"
 msgstr "吸附"
 
-#: magunetto@matteopacini.me/prefs.js:57
+#: magunetto@matteopacini.me/prefs.js:61
+msgid "Preview"
+msgstr "预览"
+
+#: magunetto@matteopacini.me/prefs.js:62
+msgid "Outline the region while the menu is up"
+msgstr "菜单显示期间勾勒出目标区域"
+
+#: magunetto@matteopacini.me/prefs.js:68
 msgid "Animate"
 msgstr "动画"
 
-#: magunetto@matteopacini.me/prefs.js:58
+#: magunetto@matteopacini.me/prefs.js:69
 msgid "Show the window travelling to its new region"
 msgstr "显示窗口移向新区域的过程"
 
-#: magunetto@matteopacini.me/prefs.js:64
+#: magunetto@matteopacini.me/prefs.js:75
 msgid "Style"
 msgstr "样式"
 
-#: magunetto@matteopacini.me/prefs.js:102
+#: magunetto@matteopacini.me/prefs.js:113
 msgid "Press a shortcut"
 msgstr "请按下快捷键"
 
-#: magunetto@matteopacini.me/prefs.js:103
+#: magunetto@matteopacini.me/prefs.js:114
 msgid "The shortcut must include a modifier key."
 msgstr "快捷键必须包含修饰键。"
 
-#: magunetto@matteopacini.me/prefs.js:105
+#: magunetto@matteopacini.me/prefs.js:116
 msgid "Cancel"
 msgstr "取消"
 
@@ -122,25 +132,35 @@ msgstr ""
 "应用所选区域。"
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
-msgid "Animate snapping"
-msgstr "吸附时显示动画"
+msgid "Preview the region"
+msgstr "预览目标区域"
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
 msgid ""
-"Whether a snapped window is seen to travel from where it was into its new "
-"region, or simply appears there."
-msgstr ""
-"被吸附的窗口是从原来的位置移动到新区域，还是直接出现在新区域。"
+"Whether the region a window would be given is outlined while the menu is up, "
+"so the choice can be seen before it is made."
+msgstr "菜单显示期间是否勾勒出窗口将要占据的区域，以便在做出选择之前就能看到结果。"
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+msgid "Animate snapping"
+msgstr "吸附时显示动画"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+msgid ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+msgstr "被吸附的窗口是从原来的位置移动到新区域，还是直接出现在新区域。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:32
 msgid "Travel style"
 msgstr "移动样式"
 
-#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:33
 msgid ""
 "How the window moves on its way to its region. One of \"expo\", \"quint\", "
 "\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
 "falls back to \"quint\"."
 msgstr ""
-"窗口移向所在区域时的运动方式。可选值为“expo”、“quint”、“md”、“cubic”、"
-"“quad”、“spring”、“back”。无法识别的值将回退为“quint”。"
+"窗口移向所在区域时的运动方式。可选值"
+"为“expo”、“quint”、“md”、“cubic”、“quad”、“spring”、“back”。无法识别的值将回"
+"退为“quint”。"

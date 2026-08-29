@@ -21,6 +21,7 @@ source "$HARNESS_DIR/lib.sh"
 DEFAULT_MONITORS=1280x800
 DEFAULT_SHORTCUT="['<Alt>z']"
 DEFAULT_ANIMATION=true
+DEFAULT_PREVIEW=true
 DEFAULT_CURVE="'quint'"
 # The desktop's own switch, which zeroes every easing duration in the shell.
 DEFAULT_DESKTOP_ANIMATIONS=true
@@ -57,7 +58,7 @@ stop_session() {
 }
 
 start_session() {
-    local monitors=$1 shortcut=$2 animation=$3 curve=$4 desktop_animations=$5
+    local monitors=$1 shortcut=$2 animation=$3 curve=$4 desktop_animations=$5 preview=$6
 
     SESSION_DIR=$(mktemp -d "$ROOT_DIR/session.XXXXXX")
     mkdir -p "$SESSION_DIR/data/gnome-shell/extensions" "$SESSION_DIR/config"
@@ -87,6 +88,7 @@ enable-animations=$desktop_animations
 [org/gnome/shell/extensions/magunetto]
 show-radial-menu=$shortcut
 snap-animation=$animation
+snap-preview=$preview
 snap-animation-curve=$curve
 KEYFILE
 
@@ -123,12 +125,12 @@ KEYFILE
         return 1
     fi
 
-    SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations"
+    SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations|$preview"
     return 0
 }
 
 ensure_session() {
-    local wanted="$1|$2|$3|$4|$5"
+    local wanted="$1|$2|$3|$4|$5|$6"
     [ "$SESSION_PROFILE" = "$wanted" ] && return 0
     stop_session
     start_session "$@"
@@ -151,6 +153,7 @@ run_case() {
     CASE_MONITORS=$DEFAULT_MONITORS
     CASE_SHORTCUT=$DEFAULT_SHORTCUT
     CASE_ANIMATION=$DEFAULT_ANIMATION
+    CASE_PREVIEW=$DEFAULT_PREVIEW
     CASE_CURVE=$DEFAULT_CURVE
     CASE_DESKTOP_ANIMATIONS=$DEFAULT_DESKTOP_ANIMATIONS
     unset -f case_body 2>/dev/null
@@ -159,7 +162,7 @@ run_case() {
     source "$file"
 
     if ! ensure_session "$CASE_MONITORS" "$CASE_SHORTCUT" "$CASE_ANIMATION" \
-                        "$CASE_CURVE" "$CASE_DESKTOP_ANIMATIONS"; then
+                        "$CASE_CURVE" "$CASE_DESKTOP_ANIMATIONS" "$CASE_PREVIEW"; then
         echo "  $name: SESSION FAILED"
         TOTAL_FAILURES=$((TOTAL_FAILURES + 1))
         return

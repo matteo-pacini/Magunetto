@@ -58,7 +58,7 @@ Everything runs inside `nix develop`.
 
 ```sh
 node --test tests/*.test.js                 # maths, curve table and catalogues, ~170ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 35 cases against a headless shell, ~95s
+dbus-run-session -- tests/harness/run.sh    # 41 cases against a headless shell, ~118s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
@@ -158,6 +158,26 @@ These cost hours to rediscover.
   skip that is never consumed swallows the next unrelated effect for that actor — a window that
   silently fails to animate when minimised, much later. Queue it only immediately before the call
   that consumes it.
+- **`TilePreview` is exported from `ui/windowManager.js` and reusable, but cannot be restyled.**
+  `open()` calls `_updateStyle()` every time, which overwrites `style_class`, so anything set from
+  outside survives until the next update and no longer. Its vocabulary is `tile-preview` plus
+  `-left` and `-right` only — GNOME's edge tiling has no quarters — so a quarter is drawn with an
+  edge's corner treatment. Subclass and override `_updateStyle()` if that matters.
+- **`TilePreview` wants an `Mtk.Rectangle`, and says so late.** `open()` compares with
+  `this._rect.equal(tileRect)`, which is skipped while `_rect` is null, so a plain object works on
+  the first selection and throws `TypeError: this._rect.equal is not a function` on the second. A
+  manual test that flicks once and releases will not find it.
+- **`close()` on a `TilePreview` only fades and hides it.** The widget stays parented to
+  `global.window_group`, so one instance is kept and reused rather than built per gesture, and
+  `disable()` has to destroy it. Nothing else reaches it.
+- **`TilePreview.open()` lowers itself below the window actor, on every call.** That suits the shell,
+  which shows a preview while a window is being dragged somewhere else. A gesture that leaves the
+  window where it is gets an outline hidden behind it whenever the region overlaps the window —
+  which is most regions. Raise it after each `open()`, not once, because each call lowers it again.
+- **A rectangle assertion cannot see occlusion.** Six harness cases asserted the preview's geometry
+  and all six passed while nothing was visible on screen; two hands-on sessions missed it too,
+  because a small centred window is the one case that happens to work. Anything whose contract is
+  *being seen* needs its position in the stacking order asserted separately from its allocation.
 - **A modal grab receives motion for the whole stage**, whatever the grab actor's allocation. Clutter
   collapses the emission chain to the grab actor whenever the picked actor falls outside it — the
   grab root *"conceptually extends infinitely in all directions"* — and the shell relies on it:
@@ -224,6 +244,13 @@ These cost hours to rediscover.
 - **A schema string cannot carry a translator comment.** `glib`'s `gschema.its` defines no
   `locNoteRule`, so `its:locNote` survives `glib-compile-schemas --strict` and is then ignored by
   `xgettext`. Anything a translator must not translate has to be evident in the string itself.
+- **`schemas/gschemas.compiled` is gitignored, and without it the extension never reaches ACTIVE.**
+  `getSettings()` needs the compiled schema beside the source, nothing in the dev loop writes it —
+  `package.nix` compiles for the Nix build and `packaging/install.sh` for the distro packages, and
+  the devShell may not write to the working tree at all — and a missing one fails with no `JS ERROR`
+  in the log, so the harness reports only `extension never became ACTIVE`. Run
+  `glib-compile-schemas --strict "magunetto@matteopacini.me/schemas"` after a fresh clone and after
+  any change to the schema.
 - **Verify APIs against the installed shell**, not against documentation or memory. GNOME 50 removed
   `Clutter.GrabState`, `grab.get_seat_state()` and `Meta.Window.get_maximized()`, and
   `Clutter.Event.get_relative_motion()` is unusable from GJS. Read the shell's own sources — the JS
