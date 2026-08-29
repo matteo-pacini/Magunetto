@@ -47,6 +47,14 @@
               pkgs.nodejs
               pkgs.jq
               pkgs.ffmpeg # turning the recorded demo into the README's assets
+
+              # Release artefacts. fpm emits deb, rpm and pacman packages from
+              # one staged tree, so no distro's own toolchain is needed.
+              pkgs.fpm
+              pkgs.rpm # fpm shells out to rpmbuild for the rpm target
+              pkgs.libarchive # and to bsdtar for the pacman target
+              pkgs.dpkg
+              pkgs.zip
             ];
 
             # The ambient GI_TYPELIB_PATH comes from the developer's own GNOME

@@ -9,3 +9,6 @@ magunetto@matteopacini.me/schemas/gschemas.compiled
 
 # direnv's nix profile links
 /.direnv/
+
+# Release artefacts, built by packaging/build.sh.
+/dist/
