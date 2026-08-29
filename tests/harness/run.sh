@@ -20,6 +20,10 @@ source "$HARNESS_DIR/lib.sh"
 
 DEFAULT_MONITORS=1280x800
 DEFAULT_SHORTCUT="['<Alt>z']"
+DEFAULT_ANIMATION=true
+DEFAULT_CURVE="'quint'"
+# The desktop's own switch, which zeroes every easing duration in the shell.
+DEFAULT_DESKTOP_ANIMATIONS=true
 
 ARTIFACT_DIR=${MAGUNETTO_ARTIFACTS:-$REPO_DIR/.harness}
 rm -rf "$ARTIFACT_DIR"
@@ -53,7 +57,7 @@ stop_session() {
 }
 
 start_session() {
-    local monitors=$1 shortcut=$2
+    local monitors=$1 shortcut=$2 animation=$3 curve=$4 desktop_animations=$5
 
     SESSION_DIR=$(mktemp -d "$ROOT_DIR/session.XXXXXX")
     mkdir -p "$SESSION_DIR/data/gnome-shell/extensions" "$SESSION_DIR/config"
@@ -79,9 +83,12 @@ disable-extension-version-validation=true
 
 [org/gnome/desktop/interface]
 enable-hot-corners=false
+enable-animations=$desktop_animations
 
 [org/gnome/shell/extensions/magunetto]
 show-radial-menu=$shortcut
+snap-animation=$animation
+snap-animation-curve=$curve
 KEYFILE
 
     local args=(--headless --unsafe-mode --wayland-display "magunetto-$$")
@@ -112,15 +119,15 @@ KEYFILE
     shell_eval 'Main.overview.hide()' >/dev/null
     wait_until "[ \"\$(eval_value 'String(Main.overview.visible)')\" = false ]" 10
 
-    SESSION_PROFILE="$monitors|$shortcut"
+    SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations"
     return 0
 }
 
 ensure_session() {
-    local wanted="$1|$2"
+    local wanted="$1|$2|$3|$4|$5"
     [ "$SESSION_PROFILE" = "$wanted" ] && return 0
     stop_session
-    start_session "$1" "$2"
+    start_session "$@"
 }
 
 # --- running cases ------------------------------------------------------------
@@ -139,12 +146,16 @@ run_case() {
     # Defaults a case may override before it runs.
     CASE_MONITORS=$DEFAULT_MONITORS
     CASE_SHORTCUT=$DEFAULT_SHORTCUT
+    CASE_ANIMATION=$DEFAULT_ANIMATION
+    CASE_CURVE=$DEFAULT_CURVE
+    CASE_DESKTOP_ANIMATIONS=$DEFAULT_DESKTOP_ANIMATIONS
     unset -f case_body 2>/dev/null
 
     # shellcheck disable=SC1090
     source "$file"
 
-    if ! ensure_session "$CASE_MONITORS" "$CASE_SHORTCUT"; then
+    if ! ensure_session "$CASE_MONITORS" "$CASE_SHORTCUT" "$CASE_ANIMATION" \
+                        "$CASE_CURVE" "$CASE_DESKTOP_ANIMATIONS"; then
         echo "  $name: SESSION FAILED"
         TOTAL_FAILURES=$((TOTAL_FAILURES + 1))
         return
@@ -195,7 +206,8 @@ fi
 # distinct profile rather than once per case.
 mapfile -t CASES < <(
     for file in "${CASES[@]}"; do
-        profile=$(grep -hE '^CASE_(MONITORS|SHORTCUT)=' "$file" | sort | tr '\n' ' ')
+        profile=$(grep -hE '^CASE_(MONITORS|SHORTCUT|ANIMATION|CURVE|DESKTOP_ANIMATIONS)=' \
+            "$file" | sort | tr '\n' ' ')
         echo "$profile|$file"
     done | sort | cut -d'|' -f2-
 )

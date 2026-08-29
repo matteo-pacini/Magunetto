@@ -12,6 +12,10 @@ import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
 import Gio from 'gi://Gio';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
+import {SNAPSHOT_NAME} from './animate.js';
+
 export const BUS_NAME = 'dev.matteopacini.Magunetto.Test';
 export const OBJECT_PATH = '/dev/matteopacini/Magunetto/Test';
 
@@ -39,14 +43,22 @@ const INTERFACE = `
       <arg type="d" direction="in" name="dx"/>
       <arg type="d" direction="in" name="dy"/>
     </method>
+    <method name="ActorTransform">
+      <arg type="(dddd)" direction="out" name="transform"/>
+    </method>
     <method name="ClearLog"/>
     <property name="Log" type="s" access="read"/>
     <property name="OverlayUp" type="b" access="read"/>
     <property name="GrabHeld" type="b" access="read"/>
+    <property name="Ghosts" type="u" access="read"/>
   </interface>
 </node>`;
 
 const EMPTY_RECT = [-1, -1, -1, -1];
+
+// A scale of -1 cannot occur, so it distinguishes "no actor to report on" from
+// an actor sitting at rest.
+const NO_TRANSFORM = [0, 0, -1, -1];
 
 function frameOf(window) {
     if (!window)
@@ -88,8 +100,25 @@ export class TestInterface {
         return this._extension.isGrabHeld;
     }
 
+    // Snapshots left behind after an animation are invisible to every other
+    // assertion here: they sit above the windows and change no geometry.
+    get Ghosts() {
+        return Main.uiGroup.get_children()
+            .filter(child => child.name === SNAPSHOT_NAME).length;
+    }
+
     ClearLog() {
         this._extension.clearLog();
+    }
+
+    // The animation moves the actor, not the window, so it is invisible to
+    // TargetFrame: the frame rect is final from the moment the snap is applied.
+    ActorTransform() {
+        const actor = this._extension.targetWindow?.get_compositor_private();
+        if (!actor)
+            return NO_TRANSFORM;
+
+        return [actor.translation_x, actor.translation_y, actor.scale_x, actor.scale_y];
     }
 
     TargetFrame() {

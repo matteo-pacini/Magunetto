@@ -46,6 +46,7 @@
               pkgs.gtk4 # test windows driven from gjs
               pkgs.nodejs
               pkgs.jq
+              pkgs.ffmpeg # turning the recorded demo into the README's assets
             ];
 
             # The ambient GI_TYPELIB_PATH comes from the developer's own GNOME

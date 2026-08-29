@@ -3,7 +3,7 @@
   "name": "Magunetto",
   "description": "Radial window snapper. Hold a shortcut, flick the pointer toward a direction, release to snap the focused window there.",
   "shell-version": ["50"],
-  "version-name": "0.1.0",
+  "version-name": "0.2.0",
   "url": "https://github.com/matteo-pacini/Magunetto",
   "settings-schema": "org.gnome.shell.extensions.magunetto",
   "gettext-domain": "magunetto@matteopacini.me"

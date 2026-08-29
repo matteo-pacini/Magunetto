@@ -26,6 +26,23 @@ mg_log() {
     mg_prop Log | sed -e "s/^(<'//" -e "s/'>,)$//"
 }
 
+# The animation moves the actor, not the window, so it is invisible to mg_rect.
+# "(((0.0, 0.0, 1.0, 1.0),),)" -> "0.0 0.0 1.0 1.0"
+mg_xform() {
+    mg ActorTransform | tr -dc '0-9.,-' | tr ',' ' ' | xargs
+}
+
+# True while the actor sits at rest: no offset, no scaling.
+mg_at_rest() {
+    [ "$(mg_xform)" = "0.0 0.0 1.0 1.0" ]
+}
+
+# "(<uint32 0>,)" -> "0". The type name carries digits of its own, so the value
+# has to be cut out rather than filtered for.
+mg_ghosts() {
+    mg_prop Ghosts | sed -e 's/.*uint32 //' -e 's/[^0-9].*//'
+}
+
 mg_bool() {
     case "$(mg_prop "$1")" in
         *true*) echo true ;;
@@ -77,6 +94,59 @@ move_pointer() { mg Move "$1" "$2" >/dev/null; settle; }
 settle() {
     shell_eval 'true' >/dev/null 2>&1
     sleep 0.15
+}
+
+# --- recording ----------------------------------------------------------------
+
+# Screenshots cannot show the snap animation: one costs a good part of the 220ms
+# the travel lasts, so a tour assembled from them catches a frame or two of motion
+# at best. A screencast records at the compositor's own rate.
+#
+# The service ties a recording to the D-Bus connection that asked for it, and
+# `gdbus call` exits the moment its call returns — which ends the recording with
+# "Sender has vanished". Asking from inside the shell makes the shell the sender,
+# and the shell is still there when the recording is stopped.
+start_recording() {
+    local template=$1
+
+    shell_eval "
+        const {Gio: G, GLib: L} = imports.gi;
+        global._mgRecBus = G.DBus.session;
+        global._mgRecFile = null;
+        global._mgRecBus.call('org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast',
+            'org.gnome.Shell.Screencast', 'Screencast',
+            new L.Variant('(sa{sv})', ['$template', {
+                'framerate': new L.Variant('i', 30),
+                'draw-cursor': new L.Variant('b', true),
+            }]),
+            null, G.DBusCallFlags.NONE, -1, null,
+            (src, res) => {
+                const [ok, used] = src.call_finish(res).deepUnpack();
+                global._mgRecFile = ok ? used : '';
+            });
+        'requested'" >/dev/null
+
+    if ! wait_until "[ -n \"\$(eval_value 'String(global._mgRecFile)')\" ] && \
+                     [ \"\$(eval_value 'String(global._mgRecFile)')\" != null ]" 15; then
+        fail "the recording never started"
+        return 1
+    fi
+
+    RECORDING_FILE=$(eval_value 'String(global._mgRecFile)')
+    [ -n "$RECORDING_FILE" ] || { fail "the recording was refused"; return 1; }
+    return 0
+}
+
+stop_recording() {
+    shell_eval "
+        global._mgRecBus.call('org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast',
+            'org.gnome.Shell.Screencast', 'StopScreencast', null,
+            null, imports.gi.Gio.DBusCallFlags.NONE, -1, null, null);
+        'stopping'" >/dev/null
+
+    # The file is still being muxed when the call returns.
+    wait_until "[ -s '$RECORDING_FILE' ]" 15
+    sleep 1.5
 }
 
 # --- windows ------------------------------------------------------------------
@@ -174,6 +244,39 @@ assert_contains() {
     esac
 }
 
+# The travel lasts a fifth of a second and changes no geometry, so it can only be
+# caught while it runs. A case that looked only afterwards would pass whether the
+# window travelled or appeared.
+assert_travels() {
+    local deadline=$((SECONDS + 3)) seen
+    while [ "$SECONDS" -lt "$deadline" ]; do
+        seen=$(mg_xform)
+        if [ "$seen" != "0.0 0.0 1.0 1.0" ]; then
+            pass "$1 (moved to $seen)"
+            return 0
+        fi
+        sleep 0.02
+    done
+    fail "$1 (the actor never left rest)"
+}
+
+assert_no_travel() {
+    local deadline=$((SECONDS + 1)) seen
+    while [ "$SECONDS" -lt "$deadline" ]; do
+        seen=$(mg_xform)
+        if [ "$seen" != "0.0 0.0 1.0 1.0" ]; then
+            fail "$1 (the actor moved to $seen)"
+            return 1
+        fi
+        sleep 0.05
+    done
+    pass "$1"
+}
+
+assert_at_rest() {
+    assert_eq "0.0 0.0 1.0 1.0" "$(mg_xform)" "$1"
+}
+
 assert_not_contains() {
     case "$1" in
         *"$2"*) fail "$3 (unexpected '$2' in '$1')" ;;
@@ -207,7 +310,17 @@ begin_gesture() {
 }
 
 end_gesture() {
+    release_gesture
+    settle_travel
+}
+
+# end_gesture waits the travel out, so it is no use to a case that needs to see
+# the travel happening. Those release the modifier themselves, sample, then settle.
+release_gesture() {
     key_release $KEY_Alt_L
+}
+
+settle_travel() {
     settle
     sleep 0.4
 }

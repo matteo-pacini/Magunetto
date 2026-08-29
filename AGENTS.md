@@ -18,7 +18,11 @@ again in 51; guarding them inline is what makes comparable extensions hard to re
 | Path | What it holds |
 |---|---|
 | `magunetto@matteopacini.me/extension.js` | keybinding, gesture lifecycle, state log |
+| `magunetto@matteopacini.me/prefs.js` | the shortcut, and the two snapping settings |
 | `magunetto@matteopacini.me/lib/geometry.js` | sector and rect maths — imports nothing, unit-tested |
+| `magunetto@matteopacini.me/lib/curveInfo.js` | travel styles and their prose — imports nothing, read by prefs too |
+| `magunetto@matteopacini.me/lib/curves.js` | resolving a style into Clutter easing |
+| `magunetto@matteopacini.me/lib/animate.js` | freeze, snapshot, counter-transform, ease |
 | `magunetto@matteopacini.me/lib/radialMenu.js` | modal grab, release detection, Cairo drawing |
 | `magunetto@matteopacini.me/lib/snap.js` | target eligibility, applying geometry |
 | `magunetto@matteopacini.me/lib/testInterface.js` | test-only D-Bus surface, gated on `MAGUNETTO_TEST` |
@@ -33,8 +37,8 @@ choice was made, including the rejected alternatives.
 Everything runs inside `nix develop`.
 
 ```sh
-node --test tests/*.test.js                 # maths only, ~75ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 21 cases against a headless shell, ~53s
+node --test tests/*.test.js                 # maths and curve table, ~75ms, no shell
+dbus-run-session -- tests/harness/run.sh    # 31 cases against a headless shell, ~85s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
@@ -43,10 +47,30 @@ tests/harness/watch.sh                      # nested shell in a window, to drive
 Work at the cheapest tier that can prove the change: geometry changes need only the unit tier;
 anything touching the shell needs the harness. Add a case in `tests/harness/cases/` for each spec
 scenario you affect — a case defines `case_body()` and uses the helpers in `harness/lib.sh`
-(`begin_gesture`, `flick`, `end_gesture`, `mg_log`, `mg_rect`, `assert_eq`).
+(`begin_gesture`, `flick`, `end_gesture`, `mg_log`, `mg_rect`, `assert_eq`). A case may override
+`CASE_MONITORS`, `CASE_SHORTCUT`, `CASE_ANIMATION`, `CASE_CURVE` and `CASE_DESKTOP_ANIMATIONS`;
+sharing those values with another case means sharing its session rather than booting a new shell.
 
 Assert on the extension's state log and on window geometry, not on pixels. Failing cases leave a
 screenshot and the shell log in `.harness/`.
+
+The snap animation is the exception: it changes neither, so it is only visible through `mg_xform`
+and `mg_ghosts`, and only while it runs. Release with `release_gesture`, assert with
+`assert_travels` / `assert_no_travel` / `assert_at_rest`, then `settle_travel`. `end_gesture` waits
+the travel out, so a case built on it passes whether the window travelled or teleported.
+
+## The demo
+
+`assets/demo.gif` is generated, not hand-made, so it always shows the code as it stands:
+
+```sh
+dbus-run-session -- tests/harness/run.sh _demo   # records .harness/demo.webm
+tests/harness/demo-encode.sh                     # writes assets/demo.{gif,mp4}
+```
+
+`_demo.sh` is a case that records rather than asserts; `run.sh` skips `_`-prefixed files unless they
+are named. Screenshots cannot capture this — one costs a good part of the 220ms a travel lasts — so
+it drives `org.gnome.Shell.Screencast` instead.
 
 ## Traps
 
@@ -54,6 +78,11 @@ These cost hours to rediscover.
 
 - **The shell cannot be restarted on Wayland.** Never tell someone to log out to test a change; use
   `watch.sh` or the harness.
+- **A new file that is not `git add`ed does not exist to the VM tier.** `nix build` takes a flake's
+  source from the git tree, so an untracked file is simply absent from the derivation — the VM
+  installs an extension whose imports point at nothing, and the only symptom is that it never
+  reaches ACTIVE (`ImportError: Unable to load file from: .../lib/curves.js`). The unit and harness
+  tiers read the working tree and see the file, so they pass. `git add` before running `--vm`.
 - **Test sessions need a throwaway `HOME` *and* `GSETTINGS_BACKEND=keyfile`.** With only the first,
   GSettings reaches the real dconf service over the session bus and writes land in the developer's
   desktop configuration. This has already happened once.
@@ -66,8 +95,32 @@ These cost hours to rediscover.
 - **Super cannot be a hold-modifier.** Pressing it switches the shell to overview action mode, and
   bindings registered for normal mode stop matching. The hot corner does the same, so the harness
   disables it.
+- **`watch.sh` is deaf if the extension is already installed on your desktop.** The outer compositor
+  matches its own keybindings before anything reaches the nested window, so the shortcut is consumed
+  out there. Give the nested session a different one rather than disabling your real extension —
+  that writes to `enabled-extensions`, which is Home Manager's on this machine.
+- **A move is reported synchronously; a resize is not.** `move_frame()` emits `size-changed` before
+  it returns, with the new rectangle already in place, and emits nothing further. `move_resize_frame()`
+  emits one immediately that still carries the *old* size, then another once the client acks the
+  configure. `get_frame_rect()` right after the call still reports the old size. Anything driven off
+  the first report animates a scale of 1; anything connected after the call misses a pure move
+  entirely.
+- **`MetaWindowActor.freeze()` is refcounted and an unpaired one is permanent.** A frozen actor stops
+  updating for good — no repaints, no geometry. Every path out has to thaw, including the ones where
+  the expected signal never arrives. Snapping to the rectangle a window already occupies reports
+  nothing at all, which is the case that finds this.
+- **`Main.wm.skipNextEffect()` is a queue, not a flag.** It is a `Set` drained by `.delete()`, so a
+  skip that is never consumed swallows the next unrelated effect for that actor — a window that
+  silently fails to animate when minimised, much later. Queue it only immediately before the call
+  that consumes it.
 - **A window mapping after synthetic input loses the focus-stealing race** and must be activated
   explicitly. With no windows open the shell falls back to the overview, which holds a grab.
+- **A screencast dies with its caller.** `org.gnome.Shell.Screencast` ties the recording to the
+  D-Bus connection that asked for it, and `gdbus call` exits as soon as its call returns — so the
+  call answers `(true, '<path>')`, leaves a stub file, and the log says `Fatal error while
+  recording: Sender has vanished`. Ask from inside the shell with an `Eval` call: the shell is then
+  the sender and is still there to stop it. Its bus name is its own, not a path under
+  `org.gnome.Shell`, and `file_template` now wants no extension.
 - **Verify APIs against the installed shell**, not against documentation or memory. GNOME 50 removed
   `Clutter.GrabState`, `grab.get_seat_state()` and `Meta.Window.get_maximized()`, and
   `Clutter.Event.get_relative_motion()` is unusable from GJS. Read the shell's own sources — the JS

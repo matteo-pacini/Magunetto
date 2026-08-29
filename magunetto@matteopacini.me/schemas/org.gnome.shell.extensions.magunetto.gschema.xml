@@ -11,5 +11,21 @@
         are released.
       </description>
     </key>
+    <key name="snap-animation" type="b">
+      <default>true</default>
+      <summary>Animate snapping</summary>
+      <description>
+        Whether a snapped window is seen to travel from where it was into its
+        new region, or simply appears there.
+      </description>
+    </key>
+    <key name="snap-animation-curve" type="s">
+      <default>'quint'</default>
+      <summary>Travel style</summary>
+      <description>
+        How the window moves on its way to its region. One of expo, quint, md,
+        cubic, quad, spring, back. An unrecognised value falls back to quint.
+      </description>
+    </key>
   </schema>
 </schemalist>

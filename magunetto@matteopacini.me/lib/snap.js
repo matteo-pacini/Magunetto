@@ -2,6 +2,9 @@
 
 import Meta from 'gi://Meta';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
+import {animate, capture} from './animate.js';
 import {rectFor} from './geometry.js';
 
 export function isSnappable(window) {
@@ -38,10 +41,27 @@ export function workAreaFor(window) {
     return {x: area.x, y: area.y, width: area.width, height: area.height};
 }
 
-export function snap(window, sector) {
+export function snap(window, sector, curve) {
     const rect = rectFor(sector, workAreaFor(window));
     if (!rect)
         return null;
+
+    // Snapping to the region the window already occupies changes no geometry, so
+    // nothing would ever be reported to drive a travel to completion.
+    const current = window.get_frame_rect();
+    const moves = current.x !== rect.x || current.y !== rect.y ||
+        current.width !== rect.width || current.height !== rect.height;
+
+    const snapshot = curve && moves ? capture(window) : null;
+    const actor = window.get_compositor_private();
+
+    // Leaving maximised or fullscreen is a size change the shell animates itself,
+    // towards the rectangle this call is about to override. Suppressing it leaves
+    // one travel in charge of the whole move. The skip is queued only immediately
+    // before the effect that consumes it, so it cannot go stale and swallow an
+    // unrelated animation later.
+    if (actor && (window.is_maximized() || window.is_fullscreen()))
+        Main.wm.skipNextEffect(actor);
 
     // Placement on a maximised or fullscreen window is ignored, so that state has
     // to go first.
@@ -56,6 +76,9 @@ export function snap(window, sector) {
     // clamped in ways that break multi-monitor placement.
     window.move_frame(true, rect.x, rect.y);
     window.move_resize_frame(true, rect.x, rect.y, rect.width, rect.height);
+
+    if (snapshot)
+        animate(snapshot, curve, rect);
 
     return rect;
 }

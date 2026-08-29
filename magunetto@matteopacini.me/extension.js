@@ -5,6 +5,7 @@ import Shell from 'gi://Shell';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+import {curveFor} from './lib/curves.js';
 import {NONE} from './lib/geometry.js';
 import {RadialMenu} from './lib/radialMenu.js';
 import {isSnappable, snap, stillExists} from './lib/snap.js';
@@ -121,7 +122,13 @@ export default class MagunettoExtension extends Extension {
             return;
         }
 
-        snap(target, sector);
+        // Read at commit time rather than cached, so a preference change applies
+        // to the next gesture without reloading the extension.
+        const curve = this._settings.get_boolean('snap-animation')
+            ? curveFor(this._settings.get_string('snap-animation-curve'))
+            : null;
+
+        snap(target, sector, curve);
         this.record(`snapped:${sector}`);
     }
 }

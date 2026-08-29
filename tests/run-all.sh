@@ -30,6 +30,18 @@ else
 fi
 
 if [ "${1:-}" = "--vm" ]; then
+    # The VM builds from the flake source, which is the git tree. An untracked
+    # file is absent from the derivation, and the only symptom is an extension
+    # that never reaches ACTIVE fifteen minutes later.
+    untracked=$(git -C "$REPO_DIR" ls-files --others --exclude-standard -- \
+        "magunetto@matteopacini.me" 2>/dev/null)
+    if [ -n "$untracked" ]; then
+        echo "vm: refusing to run, these extension files are untracked:"
+        echo "$untracked" | sed 's/^/    /'
+        echo "  git add them first, or the VM will install an extension without them."
+        exit 1
+    fi
+
     echo
     echo "== virtual machine: full GNOME session =="
     if nix build .#checks.x86_64-linux.vm --no-link; then
