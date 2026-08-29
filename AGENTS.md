@@ -25,7 +25,7 @@ again in 51; guarding them inline is what makes comparable extensions hard to re
 | `magunetto@matteopacini.me/lib/animate.js` | freeze, snapshot, counter-transform, ease |
 | `magunetto@matteopacini.me/lib/radialMenu.js` | modal grab, release detection, Cairo drawing |
 | `magunetto@matteopacini.me/lib/snap.js` | target eligibility, applying geometry |
-| `magunetto@matteopacini.me/lib/testInterface.js` | test-only D-Bus surface, gated on `MAGUNETTO_TEST` |
+| `tests/harness/shellhook.js` | the control surface the tests drive — injected, never shipped |
 | `tests/harness/` | headless-shell harness; `cases/` is one file per behaviour |
 | `openspec/changes/*/specs/` | the behaviour contract; scenarios map 1:1 to harness cases |
 
@@ -38,7 +38,7 @@ Everything runs inside `nix develop`.
 
 ```sh
 node --test tests/*.test.js                 # maths and curve table, ~75ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 31 cases against a headless shell, ~85s
+dbus-run-session -- tests/harness/run.sh    # 32 cases against a headless shell, ~85s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
@@ -115,6 +115,18 @@ These cost hours to rediscover.
   that consumes it.
 - **A window mapping after synthetic input loses the focus-stealing race** and must be activated
   explicitly. With no windows open the shell falls back to the overview, which holds a grab.
+- **An injected module resolves relative imports against its own directory.** `shellhook.js` is
+  imported by absolute path, so it cannot `import './animate.js'` — it carries its own copy of
+  anything shared. `animate-ghosts.sh` exists to make that copy fail loudly when it drifts.
+- **A promise fired into `Eval` reports nothing.** `Eval` answers with the value of the expression,
+  so an import that rejects still answers `(true, ...)` exactly like one that resolved. Stash the
+  outcome somewhere a second call can read, and wait for the thing you asked for to actually appear.
+- **`gdbus` parses an `Eval` argument as GVariant text before sending it.** An expression that both
+  starts and ends with a double quote loses them on the way, and the shell sees a syntax error.
+  Start with `String(...)` or a `global.` reference and it never bites.
+- **`Meta.is_wayland_compositor` was removed in GNOME 50**, along with the others listed below. Use
+  `global.backend.is_headless()` to tell a test session from a real one — it has no setter and is
+  fixed at startup.
 - **A screencast dies with its caller.** `org.gnome.Shell.Screencast` ties the recording to the
   D-Bus connection that asked for it, and `gdbus call` exits as soon as its call returns — so the
   call answers `(true, '<path>')`, leaves a stub file, and the log says `Fatal error while
@@ -133,6 +145,15 @@ These cost hours to rediscover.
 
   For anything else, probe the live API from a headless session with an `Eval` call rather than
   trusting documentation.
+
+## Where this harness should go
+
+`gnome-shell-test-tool` gained `--extension` in GNOME 50.alpha. It runs an automation script
+in-process — no `Eval`, no unsafe mode — and sets up a throwaway `XDG_*_HOME` with
+`GSETTINGS_BACKEND=keyfile` itself, which is two of the traps above solved upstream.
+
+It is the better shape and it is deliberately not used yet: adopting it means rewriting the cases
+from bash into in-process JavaScript. Recorded so the next person does not have to find it again.
 
 ## Planning
 

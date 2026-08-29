@@ -3,7 +3,8 @@
 #
 # The driver's own key-sending primitive presses and releases a key atomically,
 # so it cannot hold a modifier while moving the pointer. The gesture is therefore
-# driven through the extension's test interface even here.
+# driven from inside the shell even here, through the harness's control surface —
+# which the shell is asked to import, and which the extension does not ship.
 { pkgs, magunetto }:
 let
   uuid = magunetto.passthru.extensionUuid;
@@ -47,6 +48,23 @@ let
   # Synthetic input counts as user activity, so a window mapping afterwards can
   # lose the focus-stealing race and open unfocused.
   mgActivate = evalScript "mg-activate" "global.get_window_actors().at(-1).meta_window.activate(global.get_current_time());String(1)";
+
+  # The control surface is not part of the extension; the shell imports it from
+  # the store when the test asks. Single quotes would end the shell quoting that
+  # evalScript and runAs both apply, so the injected code uses only double ones.
+  hookFile = ./harness/shellhook.js;
+
+  mgInstallHook = evalScript "mg-installhook" ''
+    globalThis.magunettoHookResult = "pending";
+    import("file://${hookFile}")
+        .then(m => { globalThis.magunettoHookResult = String(m.init()); })
+        .catch(e => { globalThis.magunettoHookResult = "failed: " + e; });
+    String(1)
+  '';
+
+  # An import failure resolves the promise rather than throwing, so the request
+  # answers successfully either way. Only this tells the two apart.
+  mgHookReady = evalExpect "mg-hookready" "String(globalThis.magunettoHookResult)" "hooked";
 
   mgHook = pkgs.writeShellScriptBin "mg-hook" ''
     ${session}
@@ -93,11 +111,12 @@ pkgs.testers.nixosTest {
         mgHideOverview
         mgWindowCount
         mgActivate
+        mgInstallHook
+        mgHookReady
       ];
 
-      # Eval is how the test reads shell state, and it is refused unless the
-      # shell was started in unsafe mode. The test interface is exported only
-      # when MAGUNETTO_TEST is set.
+      # Eval is how the test reads shell state and how it loads the control
+      # surface, and it is refused unless the shell was started in unsafe mode.
       # The template unit is what gets instantiated; overriding the instance name
       # produces a unit file that is never used.
       systemd.user.services."org.gnome.Shell@".serviceConfig = {
@@ -105,7 +124,6 @@ pkgs.testers.nixosTest {
           ""
           "${pkgs.gnome-shell}/bin/gnome-shell --unsafe-mode"
         ];
-        Environment = [ "MAGUNETTO_TEST=1" ];
       };
 
       virtualisation.memorySize = 2048;
@@ -127,6 +145,11 @@ pkgs.testers.nixosTest {
     machine.wait_until_succeeds(
         "${runAs "mg-shell gnome-extensions info ${uuid}"} | grep -q ACTIVE"
     )
+
+    # init() resolves the extension through the extension manager, so this can
+    # only run once the extension is loaded.
+    machine.succeed("${runAs "mg-installhook"}")
+    machine.wait_until_succeeds("${runAs "mg-hookready"}")
 
     machine.execute("${runAs "nohup mg-shell gnome-calculator >/tmp/calc.log 2>&1 &"}")
     machine.sleep(15)

@@ -67,7 +67,6 @@ start_session() {
     export XDG_DATA_HOME=$SESSION_DIR/data
     export XDG_CONFIG_HOME=$SESSION_DIR/config
     export XDG_CACHE_HOME=$SESSION_DIR/cache
-    export MAGUNETTO_TEST=1
     export WAYLAND_DISPLAY="magunetto-$$"
     export GDK_BACKEND=wayland
     unset _warped
@@ -118,6 +117,11 @@ KEYFILE
     # settling until it is dismissed.
     shell_eval 'Main.overview.hide()' >/dev/null
     wait_until "[ \"\$(eval_value 'String(Main.overview.visible)')\" = false ]" 10
+
+    if ! install_hook; then
+        echo "  the shell hook could not be installed"
+        return 1
+    fi
 
     SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations"
     return 0

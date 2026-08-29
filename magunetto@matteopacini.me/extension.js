@@ -1,4 +1,3 @@
-import GLib from 'gi://GLib';
 import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 
@@ -9,7 +8,6 @@ import {curveFor} from './lib/curves.js';
 import {NONE} from './lib/geometry.js';
 import {RadialMenu} from './lib/radialMenu.js';
 import {isSnappable, snap, stillExists} from './lib/snap.js';
-import {TestInterface} from './lib/testInterface.js';
 
 const KEYBINDING = 'show-radial-menu';
 
@@ -30,9 +28,6 @@ export default class MagunettoExtension extends Extension {
         this.record(`keybinding:${action}:${this._settings.get_strv(KEYBINDING)[0]}`);
 
         this.record('enabled');
-
-        if (GLib.getenv('MAGUNETTO_TEST'))
-            this._test = new TestInterface(this);
     }
 
     disable() {
@@ -41,8 +36,6 @@ export default class MagunettoExtension extends Extension {
 
         Main.wm.removeKeybinding(KEYBINDING);
 
-        this._test?.destroy();
-        this._test = null;
         this._targetWindow = null;
         this._settings = null;
         this._log = null;

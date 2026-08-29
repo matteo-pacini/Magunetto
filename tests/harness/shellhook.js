@@ -1,12 +1,16 @@
-// Test-only control surface. Exported solely when MAGUNETTO_TEST is set in the
-// environment, because it can synthesise input and would be a capability leak in
-// a normal session.
+// The harness's control surface, injected into a running shell rather than
+// shipped. run.sh imports this file by absolute path through the shell's own
+// evaluation interface and calls init(); the extension neither knows about it
+// nor cooperates.
 //
-// It exists because assertions cannot come from outside the shell: the shell's
-// evaluation and screenshot interfaces are restricted to allowlisted callers,
-// and the window introspection interface reports no geometry. It also exists
-// because the virtual-machine test tier cannot hold a modifier down while moving
-// the pointer, so even there the gesture is driven through here.
+// It lives inside the shell because assertions cannot come from outside one: the
+// gesture needs a modifier held down while the pointer moves, which nothing
+// outside the compositor can do on Wayland, and the window introspection
+// interface reports no geometry.
+//
+// It is not part of the extension because it need not be. Synthesising input is
+// how GNOME Shell's own tests drive the compositor, but shipping the ability to
+// do so over the session bus is not something any other extension does.
 
 import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
@@ -14,10 +18,16 @@ import Gio from 'gi://Gio';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {SNAPSHOT_NAME} from './animate.js';
+// Carried rather than imported: a module loaded by absolute path resolves its
+// relative imports against its own directory, so it cannot reach into the
+// extension. Renaming the snapshot actor without changing this here would make
+// every ghost assertion read zero and pass vacuously, which animate-ghosts.sh
+// exists to catch.
+const SNAPSHOT_NAME = 'magunetto-snapshot';
 
 export const BUS_NAME = 'dev.matteopacini.Magunetto.Test';
 export const OBJECT_PATH = '/dev/matteopacini/Magunetto/Test';
+const EXTENSION_UUID = 'magunetto@matteopacini.me';
 
 const INTERFACE = `
 <node>
@@ -152,4 +162,16 @@ export class TestInterface {
     Move(dx, dy) {
         this._pointer.notify_relative_motion(GLib.get_monotonic_time(), dx, dy);
     }
+}
+
+// Entry point for the injection. Finds the extension instead of being built by
+// it, so nothing in the shipped code refers to any of this.
+export function init() {
+    const extension = Main.extensionManager.lookup(EXTENSION_UUID)?.stateObj;
+    if (!extension)
+        throw new Error(`${EXTENSION_UUID} is not loaded; nothing to hook`);
+
+    globalThis.magunettoHook?.destroy();
+    globalThis.magunettoHook = new TestInterface(extension);
+    return 'hooked';
 }

@@ -96,6 +96,33 @@ settle() {
     sleep 0.15
 }
 
+# --- the shell hook -------------------------------------------------------------
+
+# Loads shellhook.js into the running shell and waits for its interface to
+# answer. The extension ships nothing of this: everything the cases call is
+# exported from here, by a module the shell imports at our request.
+#
+# The import is a promise, and a promise fired into Eval reports nothing — a
+# failing import answers `(true, '"requested"')` exactly like a working one. So
+# the outcome is stashed where a second call can read it, and the object path is
+# polled before any case runs.
+install_hook() {
+    local hook=$HARNESS_DIR/shellhook.js
+
+    shell_eval "
+        globalThis.magunettoHookResult = 'pending';
+        import('file://$hook')
+            .then(m => { globalThis.magunettoHookResult = String(m.init()); })
+            .catch(e => { globalThis.magunettoHookResult = 'failed: ' + e; });
+        'requested'" >/dev/null
+
+    if ! wait_until "mg WorkArea >/dev/null 2>&1" 15; then
+        echo "  the shell hook never answered: $(eval_value 'String(globalThis.magunettoHookResult)')"
+        return 1
+    fi
+    return 0
+}
+
 # --- recording ----------------------------------------------------------------
 
 # Screenshots cannot show the snap animation: one costs a good part of the 220ms

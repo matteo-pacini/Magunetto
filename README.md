@@ -157,9 +157,14 @@ dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases
 tests/harness/watch.sh   # nested shell in a window, to drive the menu by hand
 ```
 
-The harness boots a headless GNOME Shell with a virtual monitor, loads the extension, injects
-synthetic input, and asserts on the extension's state trace and the resulting window geometry.
-Screenshots and logs from failing cases land in `.harness/`.
+The harness boots a headless GNOME Shell with a virtual monitor, loads the extension, and asserts on
+its state trace and the resulting window geometry. Screenshots and logs from failing cases land in
+`.harness/`.
+
+The gesture has to be driven from inside the compositor — it needs a modifier held down while the
+pointer moves, which nothing outside can do on Wayland. So the harness asks the shell to import
+`harness/shellhook.js`, which synthesises the input. That file is part of the tests, not of the
+extension: nothing capable of injecting input is ever shipped.
 
 Sessions run under a throwaway home with `GSETTINGS_BACKEND=keyfile`, which keeps every setting
 written during a test inside that directory.
@@ -186,7 +191,6 @@ magunetto@matteopacini.me/
   lib/animate.js         freeze, snapshot, transform, ease
   lib/radialMenu.js      modal grab, release detection, drawing
   lib/snap.js            target eligibility and applying geometry
-  lib/testInterface.js   test-only D-Bus surface, gated on MAGUNETTO_TEST
 tests/
   geometry.test.js       unit tests for the maths
   curveInfo.test.js      unit tests for the travel styles
@@ -196,6 +200,7 @@ tests/
   harness/lib.sh         assertions, gesture and recording helpers
   harness/cases/         one file per behaviour under test
   harness/testwindow.js  a window with predictable size constraints
+  harness/shellhook.js   control surface, injected into the shell under test
   harness/watch.sh       nested shell for driving the menu by hand
   harness/demo-encode.sh turns a recorded demo into the README's assets
 package.nix              the extension derivation
