@@ -25,6 +25,22 @@ export const SNAPSHOT_NAME = 'magunetto-snapshot';
 // transition.
 const SETTLE_TIMEOUT = 250;
 
+// Travels still running, each held by the function that ends one early.
+//
+// A travel outlives the call that starts it: it holds a timeout source, two
+// signal connections, a frozen actor and a widget parented into the shell. None
+// of that is reachable from the object graph the extension tears down, so
+// disable() would otherwise leave every one of them behind — and an unpaired
+// freeze() is permanent.
+const inFlight = new Set();
+
+// Ends every travel still running, leaving each window where it was placed.
+// Only the animation of arriving is abandoned; the geometry is already applied.
+export function cancelAll() {
+    for (const cancel of [...inFlight])
+        cancel();
+}
+
 // Snapshot the window as it looks now and hold it there. Must run before the
 // geometry moves: the content is the old pixels the crossfade needs, and the
 // freeze is what stops the window being drawn at its destination during the
@@ -55,22 +71,32 @@ export function animate(snapshot, curve, target) {
     const wm = global.window_manager;
 
     let sizeId = 0;
+    let timeoutId = 0;
+    let ghost = null;
     let started = false;
     let destroyId = actor.connect('destroy', () => {
         // Nothing to thaw once the actor is gone.
         snapshot.frozen = false;
         started = true;
         release();
+        inFlight.delete(cancel);
     });
 
-    GLib.timeout_add(GLib.PRIORITY_DEFAULT, SETTLE_TIMEOUT, () => {
+    timeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, SETTLE_TIMEOUT, () => {
+        timeoutId = 0;
         start();
         return GLib.SOURCE_REMOVE;
     });
 
+    inFlight.add(cancel);
+
     // freeze() is refcounted and an unpaired one stops the window updating for
     // good, so every path out of here comes through this and it runs once.
     function release() {
+        if (timeoutId) {
+            GLib.source_remove(timeoutId);
+            timeoutId = 0;
+        }
         if (sizeId) {
             wm.disconnect(sizeId);
             sizeId = 0;
@@ -85,6 +111,26 @@ export function animate(snapshot, curve, target) {
         }
     }
 
+    function dropGhost() {
+        ghost?.destroy();
+        ghost = null;
+    }
+
+    // Abandoning a travel part-way, which only disable() does. Nothing is left to
+    // finish the eases, so the actor is put back by hand: left mid-ease it would
+    // stay drawn offset and scaled for as long as the window lives.
+    function cancel() {
+        inFlight.delete(cancel);
+        release();
+        dropGhost();
+
+        actor.remove_all_transitions();
+        actor.translation_x = 0;
+        actor.translation_y = 0;
+        actor.scale_x = 1;
+        actor.scale_y = 1;
+    }
+
     function start() {
         if (started)
             return;
@@ -95,18 +141,19 @@ export function animate(snapshot, curve, target) {
         const scaleY = newRect.height / oldRect.height;
         if (!(scaleX > 0) || !(scaleY > 0)) {
             release();
+            inFlight.delete(cancel);
             return;
         }
 
         if (content) {
-            const ghost = new St.Widget({content, name: SNAPSHOT_NAME});
+            ghost = new St.Widget({content, name: SNAPSHOT_NAME});
             ghost.set_offscreen_redirect(Clutter.OffscreenRedirect.ALWAYS);
             ghost.set_position(oldRect.x, oldRect.y);
             ghost.set_size(oldRect.width, oldRect.height);
             Main.uiGroup.add_child(ghost);
 
             // The window can close mid-travel; its snapshot must not outlive it.
-            actor.connectObject('destroy', () => ghost.destroy(), ghost);
+            actor.connectObject('destroy', () => dropGhost(), ghost);
 
             // Both callbacks go on the last ease of each object. A duration of
             // zero — which is what the desktop's own animation switch produces —
@@ -115,7 +162,7 @@ export function animate(snapshot, curve, target) {
             easeWith(ghost, {x: newRect.x, y: newRect.y},
                 curve.translate, curve.bezier, DURATION);
             easeWith(ghost, {scale_x: scaleX, scale_y: scaleY, opacity: 0},
-                curve.scale, curve.bezier, DURATION, () => ghost.destroy());
+                curve.scale, curve.bezier, DURATION, () => dropGhost());
         }
 
         // Clearing a travel still running from an earlier snap. Nothing puts the
@@ -130,7 +177,7 @@ export function animate(snapshot, curve, target) {
         easeWith(actor, {translation_x: 0, translation_y: 0},
             curve.translate, curve.bezier, DURATION);
         easeWith(actor, {scale_x: 1, scale_y: 1},
-            curve.scale, curve.bezier, DURATION);
+            curve.scale, curve.bezier, DURATION, () => inFlight.delete(cancel));
 
         // Thawing now rather than when the travel ends: waiting would apply the
         // scale to the old texture size for the whole run.

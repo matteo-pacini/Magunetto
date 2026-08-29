@@ -4,6 +4,7 @@ import Shell from 'gi://Shell';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+import {cancelAll} from './lib/animate.js';
 import {curveFor} from './lib/curves.js';
 import {NONE} from './lib/geometry.js';
 import {RadialMenu} from './lib/radialMenu.js';
@@ -11,10 +12,17 @@ import {isSnappable, snap, stillExists} from './lib/snap.js';
 
 const KEYBINDING = 'show-radial-menu';
 
+// The state trace is a development aid that nothing reads in a normal session,
+// so it is bounded rather than left to grow for as long as the shell runs. Every
+// gesture appends a handful of entries; no single run of the harness comes near
+// this, so what it holds is still the whole of what a case did.
+const LOG_LIMIT = 200;
+
 export default class MagunettoExtension extends Extension {
     enable() {
         this._log = [];
         this._menu = null;
+        this._closing = null;
         this._targetWindow = null;
         this._settings = this.getSettings();
 
@@ -34,6 +42,15 @@ export default class MagunettoExtension extends Extension {
         this._menu?.destroy();
         this._menu = null;
 
+        // A committed menu is still fading when the gesture ends, so it is no
+        // longer the open one and still has to go.
+        this._closing?.destroy();
+        this._closing = null;
+
+        // A travel outlives the gesture that started it, and holds a timeout, a
+        // frozen actor and a widget in the shell's own group.
+        cancelAll();
+
         Main.wm.removeKeybinding(KEYBINDING);
 
         this._targetWindow = null;
@@ -48,7 +65,12 @@ export default class MagunettoExtension extends Extension {
     }
 
     record(entry) {
-        this._log?.push(entry);
+        if (!this._log)
+            return;
+
+        this._log.push(entry);
+        if (this._log.length > LOG_LIMIT)
+            this._log.shift();
     }
 
     clearLog() {
@@ -65,7 +87,7 @@ export default class MagunettoExtension extends Extension {
     }
 
     get isGrabHeld() {
-        return this._menu?._grab != null;
+        return this._menu?.isGrabHeld ?? false;
     }
 
     _onTrigger(display, window, event, binding) {
@@ -88,6 +110,10 @@ export default class MagunettoExtension extends Extension {
             mask: binding.get_mask(),
             record: this.record.bind(this),
             onFinish: this._onFinish.bind(this),
+            onGone: () => {
+                if (this._closing === menu)
+                    this._closing = null;
+            },
         });
         this._menu = menu;
 
@@ -101,6 +127,10 @@ export default class MagunettoExtension extends Extension {
     }
 
     _onFinish(sector) {
+        // The menu reports itself finished as the fade starts, not when it ends,
+        // so it is no longer the open one but is still on screen. Held until it
+        // is really gone, so disable() can cut the fade short.
+        this._closing = this._menu;
         this._menu = null;
 
         const target = this._targetWindow;

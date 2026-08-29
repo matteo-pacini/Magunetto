@@ -114,7 +114,7 @@ class RadialArea extends St.DrawingArea {
 
 export const RadialMenu = GObject.registerClass(
 class RadialMenu extends St.Widget {
-    _init({monitorIndex, mask, record, onFinish}) {
+    _init({monitorIndex, mask, record, onFinish, onGone}) {
         const geometry = global.display.get_monitor_geometry(monitorIndex);
 
         super._init({
@@ -128,6 +128,7 @@ class RadialMenu extends St.Widget {
 
         this._record = record;
         this._onFinish = onFinish;
+        this._onGone = onGone;
         this._mask = mask;
         this._geometry = geometry;
         this._sector = NONE;
@@ -147,6 +148,12 @@ class RadialMenu extends St.Widget {
         this.add_child(this._area);
 
         this.connect('destroy', this._onDestroy.bind(this));
+    }
+
+    // The grab belongs to the menu; the owner reports whether one is held rather
+    // than reaching into the field that holds it.
+    get isGrabHeld() {
+        return this._grab !== null;
     }
 
     open() {
@@ -312,6 +319,10 @@ class RadialMenu extends St.Widget {
             this._finished = true;
             this._onFinish(NONE);
         }
+
+        // A menu that has finished is still on screen for the length of its
+        // fade. This is the only word the owner gets that it is really gone.
+        this._onGone();
     }
 });
 

@@ -13,6 +13,24 @@ three are possible, not a preference.
 One GNOME version per branch, no version guards. The APIs this depends on changed in 45, 49, 50 and
 again in 51; guarding them inline is what makes comparable extensions hard to read.
 
+## What it has to satisfy
+
+The extension follows the rules extensions.gnome.org reviews against, whether or not it is ever
+submitted there — they are a fair account of what an extension owes the shell it runs inside:
+
+- [Review guidelines](https://gjs.guide/extensions/review-guidelines/review-guidelines.html)
+- [Best practices](https://gjs.guide/extensions/review-guidelines/best-practices.html)
+
+The ones that bite here: nothing is created before `enable()`; everything created in it is destroyed
+in `disable()` — main loop sources included, *"even if callbacks would eventually self-terminate"*;
+and nothing imports across the boundary between the shell process and the preferences process. A
+travel is the awkward case, because it outlives the gesture that started it — `animate.js` keeps the
+ones still running in a set so `disable()` can reach them.
+
+Moving to a new GNOME version starts at that version's porting guide, not at the first thing to
+break: [GNOME Shell 50](https://gjs.guide/extensions/upgrading/gnome-shell-50.html), and its
+siblings for later releases.
+
 ## Map
 
 | Path | What it holds |
@@ -40,15 +58,12 @@ Everything runs inside `nix develop`.
 
 ```sh
 node --test tests/*.test.js                 # maths, curve table and catalogues, ~170ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 31 cases against a headless shell, ~85s
+dbus-run-session -- tests/harness/run.sh    # 32 cases against a headless shell, ~85s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
 po/update.sh                                # after changing any string a user can see
 ```
-
-Run `nix develop` **only from the repository root**, whatever you are running — its shellHook is
-cwd-sensitive. See the traps below.
 
 Work at the cheapest tier that can prove the change: geometry changes need only the unit tier;
 anything touching the shell needs the harness. Add a case in `tests/harness/cases/` for each spec
@@ -171,11 +186,12 @@ These cost hours to rediscover.
   recording: Sender has vanished`. Ask from inside the shell with an `Eval` call: the shell is then
   the sender and is still there to stop it. Its bus name is its own, not a path under
   `org.gnome.Shell`, and `file_template` now wants no extension.
-- **`nix develop` runs `openspec init` in whatever directory you started it from.** The devShell's
-  shellHook scaffolds when `./openspec` is missing, so running it from a subdirectory silently
-  creates `openspec/`, `.claude/` and `.agents/` there. Inside the extension directory that is worse
-  than untidy: `packaging/install.sh` copies that tree wholesale, and `tests/run-all.sh --vm` then
-  refuses on untracked files. Always `nix develop` from the repository root.
+- **Nothing in the devShell may write to the working tree**, and a shellHook is the tempting place
+  to do it. `packaging/install.sh` copies the extension directory wholesale, so anything that
+  appears beside the source ships inside the extension, and `tests/run-all.sh --vm` refuses while
+  anything under it is untracked. A hook that scaffolds on a missing directory is the worst shape:
+  the condition is false at the repository root and true everywhere else, so it fires only where it
+  does damage.
 - **glibc resolves a message domain's catalogue once and caches it.** A loop over `LANGUAGE` inside
   one process reports the first locale's answer for every locale after it — five probes, five German
   answers. Checking more than one catalogue means one process each.

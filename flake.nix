@@ -58,15 +58,15 @@
               pkgs.zip
             ];
 
-            # The ambient GI_TYPELIB_PATH comes from the developer's own GNOME
-            # session and mixes typelib versions, which makes gjs abort on a
-            # duplicate type. Harness clients use this pinned path instead.
             # xgettext only knows how to read a GSettings schema through the ITS
             # rules glib ships, and only looks for them here. They are in glib's
             # runtime output; glib-compile-schemas is in its dev output, so the
             # path cannot be derived from the tool that is already on PATH.
             GETTEXTDATADIRS = "${pkgs.glib.out}/share/gettext";
 
+            # The ambient GI_TYPELIB_PATH comes from the developer's own GNOME
+            # session and mixes typelib versions, which makes gjs abort on a
+            # duplicate type. Harness clients use this pinned path instead.
             MAGUNETTO_TYPELIB_PATH = pkgs.lib.makeSearchPath "lib/girepository-1.0" [
               pkgs.glib.out
               pkgs.gobject-introspection.out
@@ -76,12 +76,6 @@
               pkgs.pango.out
               pkgs.harfbuzz.out
             ];
-
-            shellHook = ''
-              if [ ! -d openspec ]; then
-                openspec init --tools claude,agents --no-animation
-              fi
-            '';
           };
         }
       );
