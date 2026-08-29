@@ -84,6 +84,23 @@ tests/harness/demo-encode.sh                     # writes assets/demo.{gif,mp4}
 are named. Screenshots cannot capture this — one costs a good part of the 220ms a travel lasts — so
 it drives `org.gnome.Shell.Screencast` instead.
 
+The README's travel-style grid is generated the same way:
+
+```sh
+dbus-run-session -- tests/harness/run.sh _curves   # records .harness/curve-*.webm
+tests/harness/curves-encode.sh                     # writes assets/curves/*.gif
+```
+
+Three things about it are deliberate. It records at 60fps rather than 30, because 220ms is seven
+frames at 30 and seven cannot distinguish an ease that is nearly over by its midpoint from one that
+overshoots. All seven styles are recorded in one session, the curve set on the extension's own
+settings object between takes, because it is read at commit time — a session boot costs more than
+the clip does. And the encoder finds the travel with scene detection rather than trusting the case's
+fixed sleeps, which drift by up to a tenth of a second between takes: half a travel.
+
+The clips are slowed threefold, equally, and the README says so. At real speed the grid would show
+seven identical blinks.
+
 ## Traps
 
 These cost hours to rediscover.

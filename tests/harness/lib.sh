@@ -135,6 +135,9 @@ install_hook() {
 # and the shell is still there when the recording is stopped.
 start_recording() {
     local template=$1
+    # 30 is enough for a gesture. A single travel lasts 220ms, so anything that
+    # means to show the shape of one needs more frames than that yields.
+    local framerate=${2:-30}
 
     shell_eval "
         const {Gio: G, GLib: L} = imports.gi;
@@ -143,7 +146,7 @@ start_recording() {
         global._mgRecBus.call('org.gnome.Shell.Screencast', '/org/gnome/Shell/Screencast',
             'org.gnome.Shell.Screencast', 'Screencast',
             new L.Variant('(sa{sv})', ['$template', {
-                'framerate': new L.Variant('i', 30),
+                'framerate': new L.Variant('i', $framerate),
                 'draw-cursor': new L.Variant('b', true),
             }]),
             null, G.DBusCallFlags.NONE, -1, null,

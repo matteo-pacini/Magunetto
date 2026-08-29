@@ -124,17 +124,20 @@ region; where it ends up is not affected by either.
 appears in its region.
 
 **Style** (`snap-animation-curve`, `quint` by default) — how it travels. Each is described in the
-preferences as you select it:
+preferences as you select it, and shown below.
 
-| Style | Key | |
-|---|---|---|
-| Instant | `expo` | Almost immediate, then a long drift into place. |
-| Snappy | `quint` | Most of the move happens at once, then it settles. |
-| Settle | `md` | Quick to move, unhurried to stop. |
-| Soft | `cubic` | Sharper than GNOME's own, still gentle at the end. |
-| Standard | `quad` | The curve GNOME uses for its own window animations. |
-| Spring | `spring` | Overshoots as it slides, but never grows past its region. |
-| Overshoot | `back` | Slides past the target and comes back, briefly exceeding its region. |
+| | | |
+|:--:|:--:|:--:|
+| ![Instant](assets/curves/expo.gif) | ![Snappy](assets/curves/quint.gif) | ![Settle](assets/curves/md.gif) |
+| **Instant** · `expo`<br>Almost immediate, then a long drift into place. | **Snappy** · `quint` — the default<br>Most of the move happens at once, then it settles. | **Settle** · `md`<br>Quick to move, unhurried to stop. |
+| ![Soft](assets/curves/cubic.gif) | ![Standard](assets/curves/quad.gif) | ![Spring](assets/curves/spring.gif) |
+| **Soft** · `cubic`<br>Sharper than GNOME's own, still gentle at the end. | **Standard** · `quad`<br>The curve GNOME uses for its own window animations. | **Spring** · `spring`<br>Overshoots as it slides, but never grows past its region. |
+| ![Overshoot](assets/curves/back.gif) | | |
+| **Overshoot** · `back`<br>Slides past the target and comes back, briefly exceeding its region. | | |
+
+Those clips are slowed to a third of real speed, all by the same amount. A travel lasts 220ms — at
+that speed the seven are indistinguishable, and the point of the grid is the shape of each rather
+than how long it takes.
 
 The duration is fixed. A style and a duration are not independent — a sharp style needs longer than
 a soft one to read the same way — so only the style is offered.
@@ -191,7 +194,14 @@ it stands:
 ```sh
 dbus-run-session -- tests/harness/run.sh _demo   # records .harness/demo.webm
 tests/harness/demo-encode.sh                     # writes assets/demo.{gif,mp4}
+
+dbus-run-session -- tests/harness/run.sh _curves # records .harness/curve-*.webm
+tests/harness/curves-encode.sh                   # writes assets/curves/*.gif
 ```
+
+The travel-style grid above comes from the same place: one clip per style, the same gesture each
+time, recorded at 60fps because a 220ms travel is seven frames at 30 and that cannot show the
+difference between an ease that is nearly over by its midpoint and one that overshoots.
 
 ### Layout
 
@@ -227,6 +237,7 @@ tests/
   harness/shellhook.js   control surface, injected into the shell under test
   harness/watch.sh       nested shell for driving the menu by hand
   harness/demo-encode.sh turns a recorded demo into the README's assets
+  harness/curves-encode.sh  turns the travel-style recordings into the grid above
 package.nix              the extension derivation
 flake.nix                devShell, package, and the vm check
 ```
