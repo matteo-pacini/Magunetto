@@ -29,15 +29,46 @@ menu SHALL remain visible for as long as the shortcut's modifier keys are held.
 - **THEN** the menu is raised exactly once
 - **AND** key auto-repeat does not raise it again or restart the gesture
 
-### Requirement: Menu appears on the monitor of the target window
+### Requirement: Menu appears on the monitor holding the pointer
 
-The menu SHALL be drawn on the monitor containing the window that will be acted upon, so that the
-gesture and its effect are on the same screen.
+The menu SHALL be drawn on the monitor containing the pointer at the moment the shortcut is pressed,
+so that the gesture is made on the screen the user is looking at. When the pointer is on no monitor,
+the menu SHALL be drawn on the monitor holding the target window.
 
-#### Scenario: Focused window on a secondary monitor
+#### Scenario: Pointer and focused window on the same monitor
 
-- **WHEN** the shortcut is pressed while the focused window is on a secondary monitor
-- **THEN** the menu is drawn on that secondary monitor
+- **WHEN** the shortcut is pressed with the pointer on the same monitor as the focused window
+- **THEN** the menu is drawn on that monitor
+
+#### Scenario: Pointer on a monitor other than the focused window's
+
+- **WHEN** the shortcut is pressed with the focused window on one monitor and the pointer on another
+- **THEN** the menu is drawn on the monitor holding the pointer
+- **AND** it is drawn around the pointer rather than against an edge of the window's monitor
+
+#### Scenario: Pointer on no monitor
+
+- **WHEN** the shortcut is pressed while the pointer is not on any monitor
+- **THEN** the menu is drawn on the monitor holding the target window
+
+### Requirement: The gesture's monitor is fixed when the menu opens
+
+The system SHALL choose the gesture's monitor once, when the menu is raised, and SHALL NOT
+reconsider it for the rest of the gesture. Pointer movement during the gesture SHALL change only the
+selected sector.
+
+#### Scenario: Pointer crosses onto another monitor during the gesture
+
+- **WHEN** the pointer moves onto a different monitor while the menu is up
+- **THEN** the menu stays on the monitor it was raised on
+- **AND** releasing the shortcut acts on the monitor the menu was raised on
+
+#### Scenario: Gesture toward an adjoining monitor
+
+- **WHEN** the gesture begins near the boundary between two monitors and the pointer is moved across
+  it
+- **THEN** the sector selected is the one matching the direction of movement
+- **AND** the monitor acted upon is unchanged by the crossing
 
 ### Requirement: Pointer direction selects a sector
 

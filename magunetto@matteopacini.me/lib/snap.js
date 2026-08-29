@@ -33,16 +33,19 @@ export function stillExists(window) {
 
 // Mtk.Rectangle crosses into plain objects here so the geometry maths stays free
 // of any toolkit import.
-export function workAreaFor(window) {
-    const monitor = window.get_monitor();
+export function workAreaFor(monitorIndex) {
     const area = global.workspace_manager.get_active_workspace()
-        .get_work_area_for_monitor(monitor);
+        .get_work_area_for_monitor(monitorIndex);
 
     return {x: area.x, y: area.y, width: area.width, height: area.height};
 }
 
-export function snap(window, sector, curve) {
-    const rect = rectFor(sector, workAreaFor(window));
+// The monitor is the caller's to decide, not this function's to look up. Asking
+// the window would answer with the monitor it is leaving, since the rectangle is
+// computed before the move; and after the move mutter may decline to reassign it
+// at all, holding a window to its old monitor when the two differ in scale.
+export function snap(window, sector, curve, monitorIndex) {
+    const rect = rectFor(sector, workAreaFor(monitorIndex));
     if (!rect)
         return null;
 

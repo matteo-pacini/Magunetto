@@ -24,6 +24,7 @@ export default class MagunettoExtension extends Extension {
         this._menu = null;
         this._closing = null;
         this._targetWindow = null;
+        this._gestureMonitor = null;
         this._settings = this.getSettings();
 
         const action = Main.wm.addKeybinding(
@@ -54,6 +55,7 @@ export default class MagunettoExtension extends Extension {
         Main.wm.removeKeybinding(KEYBINDING);
 
         this._targetWindow = null;
+        this._gestureMonitor = null;
         this._settings = null;
         this._log = null;
     }
@@ -105,8 +107,18 @@ export default class MagunettoExtension extends Extension {
         this.record(`keybinding-fired:${binding.get_mask()}`);
         this._targetWindow = target;
 
+        // The gesture belongs to the monitor under the pointer, decided once here
+        // and held for the rest of it. Deciding again at release would be wrong:
+        // nothing pins the pointer at the seam between two monitors, so a flick
+        // begun anywhere near one carries it across, and the window would follow.
+        // In a gap between monitors there is no answer, and the window's own
+        // monitor is the one the gesture would have used before it asked.
+        const [pointerX, pointerY] = global.get_pointer();
+        const monitor = Main.layoutManager.findMonitorForPoint(pointerX, pointerY);
+        this._gestureMonitor = monitor ? monitor.index : target.get_monitor();
+
         const menu = new RadialMenu({
-            monitorIndex: target.get_monitor(),
+            monitorIndex: this._gestureMonitor,
             mask: binding.get_mask(),
             record: this.record.bind(this),
             onFinish: this._onFinish.bind(this),
@@ -151,7 +163,7 @@ export default class MagunettoExtension extends Extension {
             ? curveFor(this._settings.get_string('snap-animation-curve'))
             : null;
 
-        snap(target, sector, curve);
+        snap(target, sector, curve, this._gestureMonitor);
         this.record(`snapped:${sector}`);
     }
 }

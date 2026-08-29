@@ -1,4 +1,6 @@
-# The menu follows the window's monitor, and geometry stays on that monitor.
+# Pointer and window on the same monitor: the gesture is made where the window
+# already is, so the menu and the resulting geometry both stay there. The
+# cross-monitor cases cover the gesture being made anywhere else.
 CASE_MONITORS="1280x800,1280x800"
 
 case_body() {

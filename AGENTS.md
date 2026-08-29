@@ -58,7 +58,7 @@ Everything runs inside `nix develop`.
 
 ```sh
 node --test tests/*.test.js                 # maths, curve table and catalogues, ~170ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 32 cases against a headless shell, ~85s
+dbus-run-session -- tests/harness/run.sh    # 35 cases against a headless shell, ~95s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
@@ -157,6 +157,21 @@ These cost hours to rediscover.
   skip that is never consumed swallows the next unrelated effect for that actor — a window that
   silently fails to animate when minimised, much later. Queue it only immediately before the call
   that consumes it.
+- **A modal grab receives motion for the whole stage**, whatever the grab actor's allocation. Clutter
+  collapses the emission chain to the grab actor whenever the picked actor falls outside it — the
+  grab root *"conceptually extends infinitely in all directions"* — and the shell relies on it:
+  `dnd.js` grabs a **0×0** actor to drive a whole-desktop drag. So sizing a grabbing widget to one
+  monitor limits what it draws, never what it hears, and `event.get_coords()` is in stage coordinates
+  spanning every monitor.
+- **The pointer passes straight through the seam between two monitors.** Only the outer edge of their
+  union pins it, so a clamp reasoned about a screen edge does not hold at a boundary between
+  monitors: a flick of a few hundred pixels begun anywhere near one crosses onto the next monitor.
+  Anything that reads the pointer's monitor after a gesture has started is reading a different
+  monitor from the one the gesture began on.
+- **`work_area_field` reports the *target window's* monitor**, because `shellhook.js` derives
+  `WorkArea` from it. A multi-monitor assertion built on it holds whether or not the window moved
+  monitors, which makes it useless for exactly the case it looks like it covers. Read the work area
+  by explicit index with `monitor_work_area_field` instead.
 - **A window mapping after synthetic input loses the focus-stealing race** and must be activated
   explicitly. With no windows open the shell falls back to the overview, which holds a grab.
 - **An injected module resolves relative imports against its own directory.** `shellhook.js` is

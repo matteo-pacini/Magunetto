@@ -360,6 +360,16 @@ flick() { move_pointer "$1" "$2"; }
 work_area_field() { mg_rect WorkArea | cut -d' ' -f"$1"; }
 frame_field()     { mg_rect TargetFrame | cut -d' ' -f"$1"; }
 
+# The work area of a named monitor. A cross-monitor assertion cannot use
+# work_area_field: the hook derives WorkArea from the target window's monitor, so
+# it reports the monitor the window left and the one it arrived on alike, and an
+# assertion built on it holds whether or not the window travelled.
+monitor_work_area_field() {
+    eval_value "let a = global.workspace_manager.get_active_workspace()
+        .get_work_area_for_monitor($1); \`\${a.x} \${a.y} \${a.width} \${a.height}\`" \
+        | cut -d' ' -f"$2"
+}
+
 # --- recording helpers shared by the demo cases -------------------------------
 
 # The travel styles, in the order curveInfo.js declares them, so anything that
