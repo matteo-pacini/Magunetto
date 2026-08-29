@@ -1,0 +1,150 @@
+# English translations for Magunetto package.
+# Copyright (C) 2026 Matteo Pacini
+# This file is distributed under the same license as the Magunetto package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Magunetto\n"
+"Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
+"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"PO-Revision-Date: 2026-08-29 12:00+0000\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language-Team: American English <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: magunetto@matteopacini.me/prefs.js:29
+msgid "Radial menu shortcut"
+msgstr "Radial menu shortcut"
+
+#: magunetto@matteopacini.me/prefs.js:30
+msgid "Hold to raise the menu, release to snap"
+msgstr "Hold to raise the menu, release to snap"
+
+#: magunetto@matteopacini.me/prefs.js:54
+msgid "Snapping"
+msgstr "Snapping"
+
+#: magunetto@matteopacini.me/prefs.js:57
+msgid "Animate"
+msgstr "Animate"
+
+#: magunetto@matteopacini.me/prefs.js:58
+msgid "Show the window travelling to its new region"
+msgstr "Show the window traveling to its new region"
+
+#: magunetto@matteopacini.me/prefs.js:64
+msgid "Style"
+msgstr "Style"
+
+#: magunetto@matteopacini.me/prefs.js:102
+msgid "Press a shortcut"
+msgstr "Press a shortcut"
+
+#: magunetto@matteopacini.me/prefs.js:103
+msgid "The shortcut must include a modifier key."
+msgstr "The shortcut must include a modifier key."
+
+#: magunetto@matteopacini.me/prefs.js:105
+msgid "Cancel"
+msgstr "Cancel"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:30
+msgid "Instant"
+msgstr "Instant"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:31
+msgid "Almost immediate, then a long drift into place."
+msgstr "Almost immediate, then a long drift into place."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:36
+msgid "Snappy"
+msgstr "Snappy"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:37
+msgid "Most of the move happens at once, then it settles."
+msgstr "Most of the move happens at once, then it settles."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:42
+msgid "Settle"
+msgstr "Settle"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:43
+msgid "Quick to move, unhurried to stop."
+msgstr "Quick to move, unhurried to stop."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:47
+msgid "Soft"
+msgstr "Soft"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:48
+msgid "Sharper than GNOME's own, still gentle at the end."
+msgstr "Sharper than GNOME's own, still gentle at the end."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:53
+msgid "Standard"
+msgstr "Standard"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:54
+msgid "The curve GNOME uses for its own window animations."
+msgstr "The curve GNOME uses for its own window animations."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:59
+msgid "Spring"
+msgstr "Spring"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:60
+msgid "Overshoots as it slides, but never grows past its region."
+msgstr "Overshoots as it slides, but never grows past its region."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:65
+msgid "Overshoot"
+msgstr "Overshoot"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:66
+msgid "Slides past the target and comes back, briefly exceeding its region."
+msgstr "Slides past the target and comes back, briefly exceeding its region."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
+msgid "Show the radial menu"
+msgstr "Show the radial menu"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:8
+msgid ""
+"Shortcut that raises the radial menu. The menu stays up while this "
+"shortcut's modifiers are held, and the selection is applied when they are "
+"released."
+msgstr ""
+"Shortcut that raises the radial menu. The menu stays up while this "
+"shortcut's modifiers are held, and the selection is applied when they are "
+"released."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Animate snapping"
+msgstr "Animate snapping"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+msgstr ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+msgid "Travel style"
+msgstr "Travel style"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+msgid ""
+"How the window moves on its way to its region. One of \"expo\", \"quint\", "
+"\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
+"falls back to \"quint\"."
+msgstr ""
+"How the window moves on its way to its region. One of \"expo\", \"quint\", "
+"\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognized value "
+"falls back to \"quint\"."

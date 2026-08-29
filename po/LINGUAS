@@ -1,0 +1,20 @@
+# Catalogues that ship, in the order they were commissioned.
+#
+# Named as GNOME names its own: bare, unless the territory changes the text.
+# gettext strips a territory but never substitutes one, so a de_AT session finds
+# de and would never look at a catalogue called de_DE.
+#
+# The source language is en_GB, so it has no catalogue; en_US has one.
+en_US
+de
+pt_BR
+es
+fr
+ru
+it
+pl
+nl
+uk
+ja
+tr
+zh_CN

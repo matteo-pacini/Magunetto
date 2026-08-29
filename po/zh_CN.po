@@ -1,0 +1,146 @@
+# Chinese translations for Magunetto package.
+# Copyright (C) 2026 Matteo Pacini
+# This file is distributed under the same license as the Magunetto package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Magunetto\n"
+"Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
+"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"PO-Revision-Date: 2026-08-29 12:00+0000\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language-Team: Simplified Chinese <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: magunetto@matteopacini.me/prefs.js:29
+msgid "Radial menu shortcut"
+msgstr "环形菜单快捷键"
+
+#: magunetto@matteopacini.me/prefs.js:30
+msgid "Hold to raise the menu, release to snap"
+msgstr "按住呼出菜单，松开完成吸附"
+
+#: magunetto@matteopacini.me/prefs.js:54
+msgid "Snapping"
+msgstr "吸附"
+
+#: magunetto@matteopacini.me/prefs.js:57
+msgid "Animate"
+msgstr "动画"
+
+#: magunetto@matteopacini.me/prefs.js:58
+msgid "Show the window travelling to its new region"
+msgstr "显示窗口移向新区域的过程"
+
+#: magunetto@matteopacini.me/prefs.js:64
+msgid "Style"
+msgstr "样式"
+
+#: magunetto@matteopacini.me/prefs.js:102
+msgid "Press a shortcut"
+msgstr "请按下快捷键"
+
+#: magunetto@matteopacini.me/prefs.js:103
+msgid "The shortcut must include a modifier key."
+msgstr "快捷键必须包含修饰键。"
+
+#: magunetto@matteopacini.me/prefs.js:105
+msgid "Cancel"
+msgstr "取消"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:30
+msgid "Instant"
+msgstr "即时"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:31
+msgid "Almost immediate, then a long drift into place."
+msgstr "几乎瞬间移动，随后缓缓漂移到位。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:36
+msgid "Snappy"
+msgstr "干脆"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:37
+msgid "Most of the move happens at once, then it settles."
+msgstr "大部分位移一次完成，随后慢慢停稳。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:42
+msgid "Settle"
+msgstr "停稳"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:43
+msgid "Quick to move, unhurried to stop."
+msgstr "移动迅速，停下从容。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:47
+msgid "Soft"
+msgstr "轻柔"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:48
+msgid "Sharper than GNOME's own, still gentle at the end."
+msgstr "比 GNOME 自带的更利落，收尾依然柔和。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:53
+msgid "Standard"
+msgstr "标准"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:54
+msgid "The curve GNOME uses for its own window animations."
+msgstr "GNOME 自身窗口动画所用的曲线。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:59
+msgid "Spring"
+msgstr "弹动"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:60
+msgid "Overshoots as it slides, but never grows past its region."
+msgstr "滑行时会越过目标，但始终不会胀出所在区域。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:65
+msgid "Overshoot"
+msgstr "过冲"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:66
+msgid "Slides past the target and comes back, briefly exceeding its region."
+msgstr "滑过目标后再退回，其间会短暂超出所在区域。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
+msgid "Show the radial menu"
+msgstr "显示环形菜单"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:8
+msgid ""
+"Shortcut that raises the radial menu. The menu stays up while this "
+"shortcut's modifiers are held, and the selection is applied when they are "
+"released."
+msgstr ""
+"用于呼出环形菜单的快捷键。按住该快捷键的修饰键期间菜单保持显示，松开修饰键时"
+"应用所选区域。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Animate snapping"
+msgstr "吸附时显示动画"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+msgstr ""
+"被吸附的窗口是从原来的位置移动到新区域，还是直接出现在新区域。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+msgid "Travel style"
+msgstr "移动样式"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+msgid ""
+"How the window moves on its way to its region. One of \"expo\", \"quint\", "
+"\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
+"falls back to \"quint\"."
+msgstr ""
+"窗口移向所在区域时的运动方式。可选值为“expo”、“quint”、“md”、“cubic”、"
+"“quad”、“spring”、“back”。无法识别的值将回退为“quint”。"

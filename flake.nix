@@ -47,6 +47,7 @@
               pkgs.nodejs
               pkgs.jq
               pkgs.ffmpeg # turning the recorded demo into the README's assets
+              pkgs.gettext # xgettext, msgfmt, msgmerge: the translation catalogues
 
               # Release artefacts. fpm emits deb, rpm and pacman packages from
               # one staged tree, so no distro's own toolchain is needed.
@@ -60,6 +61,12 @@
             # The ambient GI_TYPELIB_PATH comes from the developer's own GNOME
             # session and mixes typelib versions, which makes gjs abort on a
             # duplicate type. Harness clients use this pinned path instead.
+            # xgettext only knows how to read a GSettings schema through the ITS
+            # rules glib ships, and only looks for them here. They are in glib's
+            # runtime output; glib-compile-schemas is in its dev output, so the
+            # path cannot be derived from the tool that is already on PATH.
+            GETTEXTDATADIRS = "${pkgs.glib.out}/share/gettext";
+
             MAGUNETTO_TYPELIB_PATH = pkgs.lib.makeSearchPath "lib/girepository-1.0" [
               pkgs.glib.out
               pkgs.gobject-introspection.out

@@ -1,0 +1,155 @@
+# German translations for Magunetto package.
+# Copyright (C) 2026 Matteo Pacini
+# This file is distributed under the same license as the Magunetto package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Magunetto\n"
+"Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
+"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"PO-Revision-Date: 2026-08-29 12:00+0000\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language-Team: German <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: magunetto@matteopacini.me/prefs.js:29
+msgid "Radial menu shortcut"
+msgstr "Tastenkürzel für das Radialmenü"
+
+#: magunetto@matteopacini.me/prefs.js:30
+msgid "Hold to raise the menu, release to snap"
+msgstr "Gedrückt halten öffnet das Menü, Loslassen rastet das Fenster ein"
+
+#: magunetto@matteopacini.me/prefs.js:54
+msgid "Snapping"
+msgstr "Einrasten"
+
+#: magunetto@matteopacini.me/prefs.js:57
+msgid "Animate"
+msgstr "Animieren"
+
+#: magunetto@matteopacini.me/prefs.js:58
+msgid "Show the window travelling to its new region"
+msgstr "Das Fenster auf dem Weg in seinen neuen Bereich zeigen"
+
+#: magunetto@matteopacini.me/prefs.js:64
+msgid "Style"
+msgstr "Stil"
+
+#: magunetto@matteopacini.me/prefs.js:102
+msgid "Press a shortcut"
+msgstr "Tastenkürzel drücken"
+
+#: magunetto@matteopacini.me/prefs.js:103
+msgid "The shortcut must include a modifier key."
+msgstr "Das Tastenkürzel muss eine Zusatztaste enthalten."
+
+#: magunetto@matteopacini.me/prefs.js:105
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:30
+msgid "Instant"
+msgstr "Sofort"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:31
+msgid "Almost immediate, then a long drift into place."
+msgstr "Fast augenblicklich, danach ein langes Gleiten an seinen Platz."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:36
+msgid "Snappy"
+msgstr "Schwungvoll"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:37
+msgid "Most of the move happens at once, then it settles."
+msgstr ""
+"Der größte Teil der Bewegung geschieht auf einmal, danach kommt sie zur Ruhe."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:42
+msgid "Settle"
+msgstr "Auslaufend"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:43
+msgid "Quick to move, unhurried to stop."
+msgstr "Schnell in der Bewegung, gemächlich beim Anhalten."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:47
+msgid "Soft"
+msgstr "Sanft"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:48
+msgid "Sharper than GNOME's own, still gentle at the end."
+msgstr "Schärfer als GNOMEs eigene Kurve, am Ende dennoch weich."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:53
+msgid "Standard"
+msgstr "Standard"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:54
+msgid "The curve GNOME uses for its own window animations."
+msgstr "Die Kurve, die GNOME für seine eigenen Fensteranimationen verwendet."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:59
+msgid "Spring"
+msgstr "Federnd"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:60
+msgid "Overshoots as it slides, but never grows past its region."
+msgstr ""
+"Schwingt beim Gleiten über das Ziel hinaus, bleibt aber stets innerhalb "
+"seines Bereichs."
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:65
+msgid "Overshoot"
+msgstr "Überschwingend"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:66
+msgid "Slides past the target and comes back, briefly exceeding its region."
+msgstr ""
+"Gleitet über das Ziel hinaus und kehrt zurück, wobei es kurzzeitig über "
+"seinen Bereich hinausragt."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
+msgid "Show the radial menu"
+msgstr "Das Radialmenü anzeigen"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:8
+msgid ""
+"Shortcut that raises the radial menu. The menu stays up while this "
+"shortcut's modifiers are held, and the selection is applied when they are "
+"released."
+msgstr ""
+"Tastenkürzel, das das Radialmenü öffnet. Das Menü bleibt sichtbar, solange "
+"die Zusatztasten dieses Tastenkürzels gedrückt gehalten werden; beim "
+"Loslassen wird die Auswahl angewendet."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Animate snapping"
+msgstr "Einrasten animieren"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+msgstr ""
+"Legt fest, ob ein eingerastetes Fenster sichtbar von seiner bisherigen "
+"Position in seinen neuen Bereich wandert oder dort einfach erscheint."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+msgid "Travel style"
+msgstr "Bewegungsstil"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+msgid ""
+"How the window moves on its way to its region. One of \"expo\", \"quint\", "
+"\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
+"falls back to \"quint\"."
+msgstr ""
+"Wie sich das Fenster auf dem Weg in seinen Bereich bewegt. Einer der Werte "
+"»expo«, »quint«, »md«, »cubic«, »quad«, »spring«, »back«. Ein nicht "
+"erkannter Wert fällt auf »quint« zurück."

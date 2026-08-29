@@ -23,8 +23,9 @@
       <default>'quint'</default>
       <summary>Travel style</summary>
       <description>
-        How the window moves on its way to its region. One of expo, quint, md,
-        cubic, quad, spring, back. An unrecognised value falls back to quint.
+        How the window moves on its way to its region. One of "expo", "quint",
+        "md", "cubic", "quad", "spring", "back". An unrecognised value falls
+        back to "quint".
       </description>
     </key>
   </schema>

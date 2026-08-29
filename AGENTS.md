@@ -20,11 +20,13 @@ again in 51; guarding them inline is what makes comparable extensions hard to re
 | `magunetto@matteopacini.me/extension.js` | keybinding, gesture lifecycle, state log |
 | `magunetto@matteopacini.me/prefs.js` | the shortcut, and the two snapping settings |
 | `magunetto@matteopacini.me/lib/geometry.js` | sector and rect maths — imports nothing, unit-tested |
-| `magunetto@matteopacini.me/lib/curveInfo.js` | travel styles and their prose — imports nothing, read by prefs too |
+| `magunetto@matteopacini.me/lib/curveInfo.js` | travel styles and their prose — imports nothing, marks with `N_`, translated by prefs |
 | `magunetto@matteopacini.me/lib/curves.js` | resolving a style into Clutter easing |
 | `magunetto@matteopacini.me/lib/animate.js` | freeze, snapshot, counter-transform, ease |
 | `magunetto@matteopacini.me/lib/radialMenu.js` | modal grab, release detection, Cairo drawing |
 | `magunetto@matteopacini.me/lib/snap.js` | target eligibility, applying geometry |
+| `po/` | the template, thirteen catalogues, the extraction script, the translator brief |
+| `tests/locale-check.js` | asserts a catalogue resolves from an installed tree — the VM tier drives it |
 | `tests/harness/shellhook.js` | the control surface the tests drive — injected, never shipped |
 | `tests/harness/` | headless-shell harness; `cases/` is one file per behaviour |
 | `openspec/changes/*/specs/` | the behaviour contract; scenarios map 1:1 to harness cases |
@@ -37,12 +39,16 @@ choice was made, including the rejected alternatives.
 Everything runs inside `nix develop`.
 
 ```sh
-node --test tests/*.test.js                 # maths and curve table, ~75ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 32 cases against a headless shell, ~85s
+node --test tests/*.test.js                 # maths, curve table and catalogues, ~170ms, no shell
+dbus-run-session -- tests/harness/run.sh    # 31 cases against a headless shell, ~85s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
+po/update.sh                                # after changing any string a user can see
 ```
+
+Run `nix develop` **only from the repository root**, whatever you are running — its shellHook is
+cwd-sensitive. See the traps below.
 
 Work at the cheapest tier that can prove the change: geometry changes need only the unit tier;
 anything touching the shell needs the harness. Add a case in `tests/harness/cases/` for each spec
@@ -58,6 +64,12 @@ The snap animation is the exception: it changes neither, so it is only visible t
 and `mg_ghosts`, and only while it runs. Release with `release_gesture`, assert with
 `assert_travels` / `assert_no_travel` / `assert_at_rest`, then `settle_travel`. `end_gesture` waits
 the travel out, so a case built on it passes whether the window travelled or teleported.
+
+Text a user can see is the one thing the harness cannot reach at all: the shell draws none, and the
+preferences run in a process it never starts. So a change to a displayed string gets no harness
+case. The unit tier owns the catalogues instead — it re-extracts and compares, so a string added
+without running `po/update.sh` fails there rather than going missing in thirteen languages. The VM
+tier owns the binding, being the only tier that sees an installed tree.
 
 ## The demo
 
@@ -133,6 +145,27 @@ These cost hours to rediscover.
   recording: Sender has vanished`. Ask from inside the shell with an `Eval` call: the shell is then
   the sender and is still there to stop it. Its bus name is its own, not a path under
   `org.gnome.Shell`, and `file_template` now wants no extension.
+- **`nix develop` runs `openspec init` in whatever directory you started it from.** The devShell's
+  shellHook scaffolds when `./openspec` is missing, so running it from a subdirectory silently
+  creates `openspec/`, `.claude/` and `.agents/` there. Inside the extension directory that is worse
+  than untidy: `packaging/install.sh` copies that tree wholesale, and `tests/run-all.sh --vm` then
+  refuses on untracked files. Always `nix develop` from the repository root.
+- **glibc resolves a message domain's catalogue once and caches it.** A loop over `LANGUAGE` inside
+  one process reports the first locale's answer for every locale after it — five probes, five German
+  answers. Checking more than one catalogue means one process each.
+- **`LANGUAGE` is ignored when the message locale is `C`.** It is consulted only over a real locale,
+  so a check run under `LC_ALL=C` finds every catalogue missing and reports a fault that is not
+  there. Assert `setlocale(LocaleCategory.MESSAGES, '')` is not null before believing the answer.
+- **gettext strips a territory but never substitutes one.** A `de_AT` session searches `de_AT` then
+  `de`, and never looks at `de_DE`. Name a catalogue for its territory only when the territory
+  changes the text — `pt_BR`, `zh_CN` — which is how GNOME names its own 93.
+- **`xgettext` reads a `.gschema.xml` only through the ITS rules glib ships**, and finds them only
+  under `GETTEXTDATADIRS`. Unset, the schema contributes nothing and the template is six strings
+  short with no warning. They live in glib's *runtime* output; `glib-compile-schemas` is in its dev
+  output, so the path cannot be derived from the tool already on PATH. The devShell exports it.
+- **A schema string cannot carry a translator comment.** `glib`'s `gschema.its` defines no
+  `locNoteRule`, so `its:locNote` survives `glib-compile-schemas --strict` and is then ignored by
+  `xgettext`. Anything a translator must not translate has to be evident in the string itself.
 - **Verify APIs against the installed shell**, not against documentation or memory. GNOME 50 removed
   `Clutter.GrabState`, `grab.get_seat_state()` and `Meta.Window.get_maximized()`, and
   `Clutter.Event.get_relative_motion()` is unusable from GJS. Read the shell's own sources — the JS

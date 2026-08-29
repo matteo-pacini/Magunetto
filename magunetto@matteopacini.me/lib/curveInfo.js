@@ -17,47 +17,53 @@
 
 export const DEFAULT_CURVE = 'quint';
 
+// Marks a string for extraction without translating it. The two processes that
+// read this file bind gettext through different resource URIs, so there is no
+// single import that would be correct in both — and importing anything here is
+// what the header rules out. prefs.js translates at the point of display.
+const N_ = s => s;
+
 // Declaration order is presentation order: the sharpness ladder first, then the
 // two with a character of their own.
 export const CURVES = {
     expo: {
-        label: 'Instant',
-        description: 'Almost immediate, then a long drift into place.',
+        label: N_('Instant'),
+        description: N_('Almost immediate, then a long drift into place.'),
         translate: 'EASE_OUT_EXPO',
         scale: 'EASE_OUT_EXPO',
     },
     quint: {
-        label: 'Snappy',
-        description: 'Most of the move happens at once, then it settles.',
+        label: N_('Snappy'),
+        description: N_('Most of the move happens at once, then it settles.'),
         translate: 'EASE_OUT_QUINT',
         scale: 'EASE_OUT_QUINT',
     },
     md: {
-        label: 'Settle',
-        description: 'Quick to move, unhurried to stop.',
+        label: N_('Settle'),
+        description: N_('Quick to move, unhurried to stop.'),
         bezier: [0.05, 0.7, 0.1, 1.0],
     },
     cubic: {
-        label: 'Soft',
-        description: "Sharper than GNOME's own, still gentle at the end.",
+        label: N_('Soft'),
+        description: N_("Sharper than GNOME's own, still gentle at the end."),
         translate: 'EASE_OUT_CUBIC',
         scale: 'EASE_OUT_CUBIC',
     },
     quad: {
-        label: 'Standard',
-        description: 'The curve GNOME uses for its own window animations.',
+        label: N_('Standard'),
+        description: N_('The curve GNOME uses for its own window animations.'),
         translate: 'EASE_OUT_QUAD',
         scale: 'EASE_OUT_QUAD',
     },
     spring: {
-        label: 'Spring',
-        description: 'Overshoots as it slides, but never grows past its region.',
+        label: N_('Spring'),
+        description: N_('Overshoots as it slides, but never grows past its region.'),
         translate: 'EASE_OUT_BACK',
         scale: 'EASE_OUT_QUINT',
     },
     back: {
-        label: 'Overshoot',
-        description: 'Slides past the target and comes back, briefly exceeding its region.',
+        label: N_('Overshoot'),
+        description: N_('Slides past the target and comes back, briefly exceeding its region.'),
         translate: 'EASE_OUT_BACK',
         scale: 'EASE_OUT_BACK',
     },

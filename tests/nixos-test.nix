@@ -66,6 +66,33 @@ let
   # answers successfully either way. Only this tells the two apart.
   mgHookReady = evalExpect "mg-hookready" "String(globalThis.magunettoHookResult)" "hooked";
 
+  # The catalogues that have to ship, read from the file that decides which do,
+  # so this cannot fall behind po/LINGUAS.
+  linguas = pkgs.lib.filter (line: line != "" && !(pkgs.lib.hasPrefix "#" line)) (
+    pkgs.lib.splitString "\n" (builtins.readFile ../po/LINGUAS)
+  );
+
+  # This is the only tier that sees an installed tree. The unit tier proves the
+  # catalogues are complete; this proves they survived the build, landed where
+  # the extension looks, and are found under the domain metadata.json declares.
+  #
+  # One process per locale — glibc caches a domain's catalogue on first use, so a
+  # second LANGUAGE in the same process is silently ignored. LANGUAGE also means
+  # only one real locale need exist, which the image already has: the NixOS
+  # default builds C.UTF-8 and en_US.UTF-8 and nothing else.
+  mgL10n = pkgs.writeShellScriptBin "mg-l10n" ''
+    ${session}
+    export LC_ALL=en_US.UTF-8
+    ext=${magunetto}/share/gnome-shell/extensions/${uuid}
+    status=0
+    for locale in ${pkgs.lib.concatStringsSep " " linguas}; do
+        LANGUAGE=$locale ${pkgs.gjs}/bin/gjs -m ${./locale-check.js} \
+            "$ext/locale" "${uuid}" "$locale" \
+            "Show the window travelling to its new region" || status=1
+    done
+    exit $status
+  '';
+
   mgHook = pkgs.writeShellScriptBin "mg-hook" ''
     ${session}
     method=$1; shift
@@ -113,6 +140,7 @@ pkgs.testers.nixosTest {
         mgActivate
         mgInstallHook
         mgHookReady
+        mgL10n
       ];
 
       # Eval is how the test reads shell state and how it loads the control
@@ -145,6 +173,11 @@ pkgs.testers.nixosTest {
     machine.wait_until_succeeds(
         "${runAs "mg-shell gnome-extensions info ${uuid}"} | grep -q ACTIVE"
     )
+
+    # Every catalogue resolves from the installed tree. Nothing here needs the
+    # shell — it is here because this is the only tier where the extension is
+    # installed rather than read out of a working tree.
+    print("catalogues:", machine.succeed("${runAs "mg-l10n"}"))
 
     # init() resolves the extension through the extension manager, so this can
     # only run once the extension is loaded.

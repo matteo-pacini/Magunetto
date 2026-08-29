@@ -1,0 +1,149 @@
+# Japanese translations for Magunetto package.
+# Copyright (C) 2026 Matteo Pacini
+# This file is distributed under the same license as the Magunetto package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Magunetto\n"
+"Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
+"POT-Creation-Date: 2026-08-29 12:22+0100\n"
+"PO-Revision-Date: 2026-08-29 12:00+0000\n"
+"Last-Translator: Magunetto project <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language-Team: Japanese <https://github.com/matteo-pacini/Magunetto/issues>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: magunetto@matteopacini.me/prefs.js:29
+msgid "Radial menu shortcut"
+msgstr "ラジアルメニューのショートカット"
+
+#: magunetto@matteopacini.me/prefs.js:30
+msgid "Hold to raise the menu, release to snap"
+msgstr "押し続けるとメニューを表示、離すとスナップ"
+
+#: magunetto@matteopacini.me/prefs.js:54
+msgid "Snapping"
+msgstr "スナップ"
+
+#: magunetto@matteopacini.me/prefs.js:57
+msgid "Animate"
+msgstr "アニメーション"
+
+#: magunetto@matteopacini.me/prefs.js:58
+msgid "Show the window travelling to its new region"
+msgstr "ウィンドウが新しい領域へ移動する様子を見せる"
+
+#: magunetto@matteopacini.me/prefs.js:64
+msgid "Style"
+msgstr "スタイル"
+
+#: magunetto@matteopacini.me/prefs.js:102
+msgid "Press a shortcut"
+msgstr "ショートカットキーを押してください"
+
+#: magunetto@matteopacini.me/prefs.js:103
+msgid "The shortcut must include a modifier key."
+msgstr "ショートカットには修飾キーを含める必要があります。"
+
+#: magunetto@matteopacini.me/prefs.js:105
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:30
+msgid "Instant"
+msgstr "瞬時"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:31
+msgid "Almost immediate, then a long drift into place."
+msgstr "ほぼ一瞬で動き、そのあとゆっくりと定位置へ収まります。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:36
+msgid "Snappy"
+msgstr "一気"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:37
+msgid "Most of the move happens at once, then it settles."
+msgstr "移動のほとんどが一気に終わり、そのあと落ち着きます。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:42
+msgid "Settle"
+msgstr "収束"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:43
+msgid "Quick to move, unhurried to stop."
+msgstr "素早く動き出し、ゆったりと止まります。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:47
+msgid "Soft"
+msgstr "ソフト"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:48
+msgid "Sharper than GNOME's own, still gentle at the end."
+msgstr "GNOME 標準よりも鋭く、それでいて終わりはおだやかです。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:53
+msgid "Standard"
+msgstr "標準"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:54
+msgid "The curve GNOME uses for its own window animations."
+msgstr "GNOME 自身がウィンドウのアニメーションに使用しているカーブです。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:59
+msgid "Spring"
+msgstr "バネ"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:60
+msgid "Overshoots as it slides, but never grows past its region."
+msgstr "滑りながら行き過ぎますが、領域より大きくなることはありません。"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:65
+msgid "Overshoot"
+msgstr "オーバーシュート"
+
+#: magunetto@matteopacini.me/lib/curveInfo.js:66
+msgid "Slides past the target and comes back, briefly exceeding its region."
+msgstr "目標を通り過ぎてから戻り、一瞬だけ領域からはみ出します。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:7
+msgid "Show the radial menu"
+msgstr "ラジアルメニューを表示する"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:8
+msgid ""
+"Shortcut that raises the radial menu. The menu stays up while this "
+"shortcut's modifiers are held, and the selection is applied when they are "
+"released."
+msgstr ""
+"ラジアルメニューを表示するショートカットです。このショートカットの修飾キーを押"
+"している間はメニューが表示されたままになり、離すと選択した内容が適用されます。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:16
+msgid "Animate snapping"
+msgstr "スナップをアニメーションする"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:17
+msgid ""
+"Whether a snapped window is seen to travel from where it was into its new "
+"region, or simply appears there."
+msgstr ""
+"スナップしたウィンドウを、元の位置から新しい領域へ移動していく様子として見せる"
+"か、単に移動先へ表示するかを設定します。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
+msgid "Travel style"
+msgstr "移動スタイル"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:25
+msgid ""
+"How the window moves on its way to its region. One of \"expo\", \"quint\", "
+"\"md\", \"cubic\", \"quad\", \"spring\", \"back\". An unrecognised value "
+"falls back to \"quint\"."
+msgstr ""
+"ウィンドウが領域へ向かうときの動き方です。「expo」、「quint」、「md」、"
+"「cubic」、「quad」、「spring」、「back」のいずれかを指定します。認識できない値"
+"は「quint」として扱われます。"

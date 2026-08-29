@@ -33,8 +33,9 @@ if [ "${1:-}" = "--vm" ]; then
     # The VM builds from the flake source, which is the git tree. An untracked
     # file is absent from the derivation, and the only symptom is an extension
     # that never reaches ACTIVE fifteen minutes later.
+    # po/ is a source of the derivation too: the catalogues are compiled from it.
     untracked=$(git -C "$REPO_DIR" ls-files --others --exclude-standard -- \
-        "magunetto@matteopacini.me" 2>/dev/null)
+        "magunetto@matteopacini.me" "po" 2>/dev/null)
     if [ -n "$untracked" ]; then
         echo "vm: refusing to run, these extension files are untracked:"
         echo "$untracked" | sed 's/^/    /'

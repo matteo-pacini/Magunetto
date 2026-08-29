@@ -1,10 +1,20 @@
 {
   lib,
   stdenvNoCC,
+  gettext,
   glib,
 }:
 let
   uuid = "magunetto@matteopacini.me";
+
+  # The catalogues sit outside the extension directory, so that neither their
+  # sources nor the tooling beside them can reach an installed tree. Taking them
+  # as a second path keeps this derivation's source narrow: a change under tests/
+  # still does not rebuild the package.
+  po = builtins.path {
+    path = ./po;
+    name = "magunetto-po";
+  };
 in
 stdenvNoCC.mkDerivation {
   pname = "gnome-shell-extension-magunetto";
@@ -17,11 +27,23 @@ stdenvNoCC.mkDerivation {
     name = "magunetto-source";
   };
 
-  nativeBuildInputs = [ glib ];
+  nativeBuildInputs = [
+    gettext
+    glib
+  ];
 
+  # initTranslations() binds to the extension's own locale/ when it exists, so
+  # the catalogues are compiled into the tree rather than into the store's
+  # share/locale. That is one layout for the zip, this package, and the three
+  # distro packages alike.
   buildPhase = ''
     runHook preBuild
     glib-compile-schemas --strict schemas
+    while read -r locale; do
+        install -d "locale/$locale/LC_MESSAGES"
+        msgfmt --check --output-file="locale/$locale/LC_MESSAGES/${uuid}.mo" \
+            "${po}/$locale.po"
+    done < <(grep -vE '^[[:space:]]*(#|$)' "${po}/LINGUAS")
     runHook postBuild
   '';
 

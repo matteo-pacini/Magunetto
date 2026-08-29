@@ -1,0 +1,7 @@
+# Files holding translatable strings, relative to the repository root.
+#
+# prefs.js displays; curveInfo.js only marks — it imports nothing and cannot
+# translate, so the strings it carries are translated where they are shown.
+magunetto@matteopacini.me/prefs.js
+magunetto@matteopacini.me/lib/curveInfo.js
+magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml

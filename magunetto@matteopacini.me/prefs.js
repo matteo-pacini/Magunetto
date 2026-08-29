@@ -18,13 +18,16 @@ function isUsableShortcut(mask, keyval) {
     return Gtk.accelerator_valid(keyval, mask);
 }
 
+// gettext needs no import here: ExtensionPreferences extends ExtensionBase,
+// whose constructor binds the domain from metadata.json to the extension's own
+// locale directory before this class is ever asked for a window.
 export default class MagunettoPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
 
         const row = new Adw.ActionRow({
-            title: 'Radial menu shortcut',
-            subtitle: 'Hold to raise the menu, release to snap',
+            title: this.gettext('Radial menu shortcut'),
+            subtitle: this.gettext('Hold to raise the menu, release to snap'),
         });
 
         const label = new Gtk.ShortcutLabel({valign: Gtk.Align.CENTER});
@@ -48,18 +51,19 @@ export default class MagunettoPreferences extends ExtensionPreferences {
     }
 
     _snapGroup(settings) {
-        const group = new Adw.PreferencesGroup({title: 'Snapping'});
+        const group = new Adw.PreferencesGroup({title: this.gettext('Snapping')});
 
         const animate = new Adw.SwitchRow({
-            title: 'Animate',
-            subtitle: 'Show the window travelling to its new region',
+            title: this.gettext('Animate'),
+            subtitle: this.gettext('Show the window travelling to its new region'),
         });
         settings.bind(ANIMATION_KEY, animate, 'active', Gio.SettingsBindFlags.DEFAULT);
         group.add(animate);
 
         const style = new Adw.ComboRow({
-            title: 'Style',
-            model: Gtk.StringList.new(CURVE_KEYS.map(key => CURVES[key].label)),
+            title: this.gettext('Style'),
+            model: Gtk.StringList.new(
+                CURVE_KEYS.map(key => this.gettext(CURVES[key].label))),
         });
 
         // The subtitle is the whole point of the row: it says what the selection
@@ -68,7 +72,7 @@ export default class MagunettoPreferences extends ExtensionPreferences {
         // not fire when the stored style is already the one shown.
         const showSelected = () => {
             const key = CURVE_KEYS[style.selected] ?? DEFAULT_CURVE;
-            style.subtitle = CURVES[key].description;
+            style.subtitle = this.gettext(CURVES[key].description);
             return key;
         };
 
@@ -95,10 +99,10 @@ export default class MagunettoPreferences extends ExtensionPreferences {
 
     _capture(parent, settings) {
         const dialog = new Adw.AlertDialog({
-            heading: 'Press a shortcut',
-            body: 'The shortcut must include a modifier key.',
+            heading: this.gettext('Press a shortcut'),
+            body: this.gettext('The shortcut must include a modifier key.'),
         });
-        dialog.add_response('cancel', 'Cancel');
+        dialog.add_response('cancel', this.gettext('Cancel'));
 
         const controller = new Gtk.EventControllerKey();
         controller.connect('key-pressed', (_c, keyval, _keycode, state) => {

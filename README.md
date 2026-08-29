@@ -142,6 +142,22 @@ a soft one to read the same way — so only the style is offered.
 Snapping is immediate whatever these say if the desktop itself is set not to animate
 (`org.gnome.desktop.interface enable-animations`).
 
+## Translations
+
+The preferences read in twelve languages besides English:
+
+`de` German · `es` Spanish · `fr` French · `it` Italian · `ja` Japanese · `nl` Dutch · `pl` Polish ·
+`pt_BR` Brazilian Portuguese · `ru` Russian · `tr` Turkish · `uk` Ukrainian · `zh_CN` Simplified
+Chinese — and `en_US`, which is British English with American spelling.
+
+Strings are written in British English, so that is what a session in any other language reads. The
+radial menu has no text in any language: it says what is selected by shape and position, which is
+also why it can be read at a glance mid-gesture.
+
+To add a language or correct a word, see [po/TRANSLATING.md](po/TRANSLATING.md) — it lists every
+string with where it appears on screen, and `po/update.sh` does the rest. Corrections are
+particularly welcome: the catalogues were not all written by native speakers.
+
 ## Development
 
 ```sh
@@ -191,9 +207,17 @@ magunetto@matteopacini.me/
   lib/animate.js         freeze, snapshot, transform, ease
   lib/radialMenu.js      modal grab, release detection, drawing
   lib/snap.js            target eligibility and applying geometry
+po/                      compiled into the extension's locale/ at build time
+  magunetto.pot          the template, extracted from the sources
+  *.po                   one catalogue per language
+  LINGUAS, POTFILES      which languages ship, and which files are read
+  update.sh              re-extract, and merge into every catalogue
+  TRANSLATING.md         where each string appears, and the rules
 tests/
   geometry.test.js       unit tests for the maths
   curveInfo.test.js      unit tests for the travel styles
+  l10n.test.js           the catalogues, and what a translation must keep
+  locale-check.js        asserts a catalogue resolves from an installed tree
   run-all.sh             every tier in one command
   nixos-test.nix         virtual-machine test
   harness/run.sh         boots headless sessions, runs the cases
@@ -213,7 +237,11 @@ Contributions are welcome — issues, bug reports, and pull requests alike.
 
 Behaviour changes are spec-driven. The contract lives in `openspec/specs/`, and a change starts
 there rather than in the code: propose it with OpenSpec, write the requirements and scenarios, then
-implement. Each scenario should end up with a matching case in `tests/harness/cases/`.
+implement. Each scenario should end up with a matching case in `tests/harness/cases/` — except
+translations, which the harness cannot see at all, and which `tests/l10n.test.js` covers instead.
+
+A translation needs none of that. Edit or add a file under `po/`, run `po/update.sh`, and open a
+pull request; [po/TRANSLATING.md](po/TRANSLATING.md) has everything else.
 
 Run `tests/run-all.sh` before opening a pull request, and include the result. Every tier must pass.
 

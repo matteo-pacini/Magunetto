@@ -61,6 +61,18 @@ NIX_OUT=$(nix build .#default --no-link --print-out-paths)
 
 packaging/install.sh "$STAGE" /usr
 
+# The catalogues are compiled here rather than in install.sh, which is a plain
+# copier with no build tools and is kept that way. They go inside the extension
+# directory because that is the branch initTranslations() takes when it exists,
+# which is one layout for every artefact rather than a packaged special case.
+STAGED_EXT=$STAGE/usr/share/gnome-shell/extensions/$UUID
+while read -r locale; do
+    install -d "$STAGED_EXT/locale/$locale/LC_MESSAGES"
+    msgfmt --check --output-file="$STAGED_EXT/locale/$locale/LC_MESSAGES/$UUID.mo" \
+        "po/$locale.po"
+done < <(grep -vE '^[[:space:]]*(#|$)' po/LINGUAS)
+find "$STAGED_EXT/locale" -type f -exec chmod 644 {} +
+
 fpm_common=(
     -s dir
     -C "$STAGE"
