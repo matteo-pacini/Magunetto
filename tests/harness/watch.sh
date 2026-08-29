@@ -8,8 +8,12 @@
 # Your own session is untouched: the nested shell runs against a throwaway home
 # with its own settings store.
 #
-# Inside the nested window: press and hold Alt, tap Z, move the mouse toward a
+# Inside the nested window: press and hold Alt, tap X, move the mouse toward a
 # direction, then release Alt to snap the focused window.
+#
+# X rather than the extension's own Z, so that a copy installed on the desktop
+# outside does not swallow the shortcut: the outer compositor matches its own
+# keybindings first, and what it matches never reaches this window.
 
 set -uo pipefail
 
@@ -31,6 +35,9 @@ enabled-extensions=['$UUID']
 
 [org/gnome/desktop/interface]
 enable-hot-corners=false
+
+[org/gnome/shell/extensions/magunetto]
+show-radial-menu=['<Alt>x']
 KEYFILE
 
 export HOME=$SESSION_DIR
@@ -40,7 +47,7 @@ export XDG_CACHE_HOME=$SESSION_DIR/cache
 export GSETTINGS_BACKEND=keyfile
 
 echo "Nested shell starting. Close its window to finish."
-echo "Shortcut: hold Alt, tap Z, move the mouse, release."
+echo "Shortcut: hold Alt, tap X, move the mouse, release."
 
 # --devkit is GNOME 50's nested mode; --nested was removed.
 dbus-run-session -- gnome-shell --devkit --wayland &

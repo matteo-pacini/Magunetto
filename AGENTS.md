@@ -139,10 +139,11 @@ These cost hours to rediscover.
 - **Super cannot be a hold-modifier.** Pressing it switches the shell to overview action mode, and
   bindings registered for normal mode stop matching. The hot corner does the same, so the harness
   disables it.
-- **`watch.sh` is deaf if the extension is already installed on your desktop.** The outer compositor
-  matches its own keybindings before anything reaches the nested window, so the shortcut is consumed
-  out there. Give the nested session a different one rather than disabling your real extension —
-  that writes to `enabled-extensions`, which is Home Manager's on this machine.
+- **The outer compositor matches its own keybindings before anything reaches a nested window**, so a
+  shortcut `watch.sh` shares with an installed copy is consumed out there and the nested session is
+  deaf to it. `watch.sh` binds `<Alt>x` for that reason, leaving the extension's own `<Alt>z` to the
+  desktop. Never free a binding by disabling the real extension — that writes to
+  `enabled-extensions`, which is Home Manager's on this machine.
 - **A move is reported synchronously; a resize is not.** `move_frame()` emits `size-changed` before
   it returns, with the new rectangle already in place, and emits nothing further. `move_resize_frame()`
   emits one immediately that still carries the *old* size, then another once the client acks the
