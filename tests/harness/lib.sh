@@ -359,3 +359,20 @@ flick() { move_pointer "$1" "$2"; }
 
 work_area_field() { mg_rect WorkArea | cut -d' ' -f"$1"; }
 frame_field()     { mg_rect TargetFrame | cut -d' ' -f"$1"; }
+
+# --- recording helpers shared by the demo cases -------------------------------
+
+# The travel styles, in the order curveInfo.js declares them, so anything that
+# iterates them cannot fall behind the table that defines them.
+curve_keys() {
+    node -e "import('$REPO_DIR/magunetto@matteopacini.me/lib/curveInfo.js')
+        .then(m => console.log(m.CURVE_KEYS.join(' ')))"
+}
+
+# Starting a screencast raises a notification, and it does not land in the same
+# place in every take — it appears inside some clips and not others, which reads
+# as the recording differing when only the banner does.
+silence_banners() {
+    shell_eval "new imports.gi.Gio.Settings({schema_id: 'org.gnome.desktop.notifications'})
+        .set_boolean('show-banners', false); 'ok'" >/dev/null
+}

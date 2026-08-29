@@ -156,6 +156,15 @@ These cost hours to rediscover.
 - **`Meta.is_wayland_compositor` was removed in GNOME 50**, along with the others listed below. Use
   `global.backend.is_headless()` to tell a test session from a real one — it has no setter and is
   fixed at startup.
+- **A screencast at 60fps is fine for a second and wrong for twenty.** The service accepts the
+  framerate and reports it in the container either way. Over a 22-second tour it cannot keep up:
+  126 frames arrive, stamped as 62.5fps, so the clip claims 11.4 seconds and plays at double speed —
+  a file that looks right until it is timed against the case that produced it. Short clips are safe;
+  `_demo.sh` asks for 30 and `_curves.sh` for 60. Check a new recording's last timestamp against the
+  wall clock its case takes.
+- **The screencast emits frames on damage, not on a clock.** A clip of a 220ms travel holds about
+  ten frames inside the travel and almost none either side, so a low total frame count is not a
+  dropped recording. Count the frames in the window that matters, not across the file.
 - **A screencast dies with its caller.** `org.gnome.Shell.Screencast` ties the recording to the
   D-Bus connection that asked for it, and `gdbus call` exits as soon as its call returns — so the
   call answers `(true, '<path>')`, leaves a stub file, and the log says `Fatal error while

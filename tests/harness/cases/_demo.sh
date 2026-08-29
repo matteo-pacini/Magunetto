@@ -5,16 +5,21 @@
 # tests/harness/demo-encode.sh.
 
 case_body() {
+    silence_banners
+
     open_test_window --title "Magunetto" >/dev/null
     warp 640 400
     settle
 
+    # 30fps, not 60: over a tour this long the compositor cannot sustain 60 and
+    # quietly delivers about six, stamping them as 60 — which halves the timeline
+    # and plays the whole thing at double speed. Short clips can ask for more.
     start_recording "$ARTIFACT_DIR/demo" || return
     sleep 1
 
     # The pointer is drawn into the recording, so the flick reads as a gesture
     # rather than as the window moving on its own. Moving in steps makes the
-    # sweep visible at 30fps; one jump would be a single frame.
+    # sweep visible; one jump would be a single frame.
     sweep() { # dx dy
         local steps=6 i
         for i in $(seq $steps); do

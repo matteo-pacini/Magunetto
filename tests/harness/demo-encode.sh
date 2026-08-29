@@ -5,9 +5,9 @@
 #   dbus-run-session -- tests/harness/run.sh _demo   # records .harness/demo.webm
 #   tests/harness/demo-encode.sh                     # writes assets/demo.{gif,mp4}
 #
-# The recording is real time at the compositor's own frame rate. The mp4 keeps
-# that; the gif trades frames for size, because a smooth animation is exactly the
-# thing GIF compresses worst.
+# The recording is real time, at 60fps. The mp4 keeps every frame; the gif trades
+# some away for size, because a smooth animation is exactly the thing GIF
+# compresses worst. It keeps enough that a 220ms travel is not a teleport.
 
 set -euo pipefail
 
@@ -19,7 +19,7 @@ GIF=$REPO_DIR/assets/demo.gif
 MP4=$REPO_DIR/assets/demo.mp4
 
 GIF_WIDTH=720
-GIF_FPS=16
+GIF_FPS=24
 GIF_COLORS=64
 
 [ -f "$SOURCE" ] || {
