@@ -36,7 +36,7 @@ siblings for later releases.
 | Path | What it holds |
 |---|---|
 | `magunetto@matteopacini.me/extension.js` | keybinding, gesture lifecycle, state log |
-| `magunetto@matteopacini.me/prefs.js` | the shortcut, and the two snapping settings |
+| `magunetto@matteopacini.me/prefs.js` | the shortcut, the three settings for how a snap looks, and the two gaps |
 | `magunetto@matteopacini.me/lib/geometry.js` | sector and rect maths — imports nothing, unit-tested |
 | `magunetto@matteopacini.me/lib/curveInfo.js` | travel styles and their prose — imports nothing, marks with `N_`, translated by prefs |
 | `magunetto@matteopacini.me/lib/curves.js` | resolving a style into Clutter easing |
@@ -58,7 +58,7 @@ Everything runs inside `nix develop`.
 
 ```sh
 node --test tests/*.test.js                 # maths, curve table and catalogues, ~170ms, no shell
-dbus-run-session -- tests/harness/run.sh    # 41 cases against a headless shell, ~118s
+dbus-run-session -- tests/harness/run.sh    # 48 cases against a headless shell, ~140s
 dbus-run-session -- tests/harness/run.sh gesture cancel   # named cases while iterating
 tests/run-all.sh                            # both tiers; --vm adds the VM test (~15min)
 tests/harness/watch.sh                      # nested shell in a window, to drive by hand
@@ -69,8 +69,9 @@ Work at the cheapest tier that can prove the change: geometry changes need only 
 anything touching the shell needs the harness. Add a case in `tests/harness/cases/` for each spec
 scenario you affect — a case defines `case_body()` and uses the helpers in `harness/lib.sh`
 (`begin_gesture`, `flick`, `end_gesture`, `mg_log`, `mg_rect`, `assert_eq`). A case may override
-`CASE_MONITORS`, `CASE_SHORTCUT`, `CASE_ANIMATION`, `CASE_CURVE` and `CASE_DESKTOP_ANIMATIONS`;
-sharing those values with another case means sharing its session rather than booting a new shell.
+`CASE_MONITORS`, `CASE_SHORTCUT`, `CASE_ANIMATION`, `CASE_PREVIEW`, `CASE_CURVE`,
+`CASE_DESKTOP_ANIMATIONS`, `CASE_OUTER_GAP` and `CASE_INNER_GAP`; sharing those values with another
+case means sharing its session rather than booting a new shell.
 
 Assert on the extension's state log and on window geometry, not on pixels. Failing cases leave a
 screenshot and the shell log in `.harness/`.

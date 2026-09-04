@@ -97,8 +97,9 @@ configuration:
     "org/gnome/shell/extensions/magunetto" = {
       show-radial-menu = [ "<Alt>z" ];
       snap-preview = true;
-      snap-animation = true;
-      snap-animation-curve = "quint";
+      snap-animation = true;      snap-animation-curve = "quint";
+      snap-outer-gap = 8;
+      snap-inner-gap = 12;
     };
   };
 }
@@ -123,7 +124,7 @@ Two constraints:
 ## Snapping
 
 Run `gnome-extensions prefs magunetto@matteopacini.me`. Three settings govern what you see of a
-snap; where the window ends up is not affected by any of them.
+snap, and two govern where the window ends up.
 
 **Preview** (`snap-preview`, on by default) — whether the region is outlined while the menu is up.
 Unlike the two below, this is not suppressed when the desktop is set not to animate: the outline
@@ -149,6 +150,15 @@ Those clips are slowed to a third of real speed, all by the same amount. A trave
 that speed the seven are indistinguishable, and the point of the grid is the shape of each rather
 than how long it takes.
 
+**Outer gap** (`snap-outer-gap`, 0 by default) — space, in pixels, between a snapped window and
+the edge of the work area, on all four sides.
+
+**Inner gap** (`snap-inner-gap`, 0 by default) — the total space between two windows snapped to
+neighbouring regions: two halves side by side are exactly this far apart. Filling the work area
+with the centre action ignores it and keeps the outer gap alone.
+
+Both range from 0 to 100, and both show in the preview: the region you see outlined is the region
+you get.
 The duration is fixed. A style and a duration are not independent — a sharp style needs longer than
 a soft one to read the same way — so only the style is offered.
 
