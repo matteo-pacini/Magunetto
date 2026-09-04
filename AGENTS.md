@@ -138,6 +138,11 @@ These cost hours to rediscover.
   defaults for everything the session had set, and would have written to the developer's own dconf
   had anything clicked a row. `start_session` calls `dbus-update-activation-environment` to seal
   it. The symptom is a helper that quietly disagrees with the shell about every setting.
+- **The session's appearance is its own, and the demo depends on it.** While the activation
+  environment leaked, GTK clients picked up the developer's dark preference through the portal and
+  the recordings came out dark. Sealed, they render the session's defaults: light windows on the
+  blue wallpaper. Setting `color-scheme='prefer-dark'` to get the old look also switches the shell
+  to `picture-uri-dark`, which is the grey wallpaper — a demo with no blue in it.
 - **`org.gnome.Shell.Eval` answers `(true, '<json>')`, or `(false, '')` when refused.** Match the
   quoted value. `grep -q false` matches the *refusal*, which silently turns a check into a no-op.
 - **Eval and Screenshot need `gnome-shell --unsafe-mode`.** In a NixOS VM, override the template unit

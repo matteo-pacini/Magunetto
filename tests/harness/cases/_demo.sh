@@ -1,4 +1,5 @@
-# Not a test: drives a full tour of every sector and records it.
+# Not a test: drives a full tour of every sector, opens the preferences and sets
+# both gaps, then tours again with the gaps applied, and records the lot.
 # Run with: tests/harness/run.sh _demo
 #
 # The recording lands in .harness/demo.webm. Turn it into the README's assets with
@@ -44,17 +45,61 @@ case_body() {
         echo "      $3 -> $(mg_rect TargetFrame)" >&2
     }
 
-    tour  340    0  "right"
-    tour  240  240  "bottom-right"
-    tour    0  340  "bottom"
-    tour -240  240  "bottom-left"
-    tour -340    0  "left"
-    tour -240 -240  "top-left"
-    tour    0 -340  "top"
-    tour  240 -240  "top-right"
-    tour   30    0  "centre"
+    tour_all() {
+        tour  340    0  "right"
+        tour  240  240  "bottom-right"
+        tour    0  340  "bottom"
+        tour -240  240  "bottom-left"
+        tour -340    0  "left"
+        tour -240 -240  "top-left"
+        tour    0 -340  "top"
+        tour  240 -240  "top-right"
+        tour   30    0  "centre"
+    }
+
+    set_gap() { # key value
+        shell_eval "Main.extensionManager.lookup('$UUID').stateObj._settings
+            .set_int('$1', $2)" >/dev/null
+    }
+
+    # The dialog is a separate process, sharing this session's settings store, so
+    # its rows are bound to the same keys the shell writes. Setting them from the
+    # shell moves the real spin rows, which is what a click on each would do,
+    # without depending on where the dialog happens to be placed.
+    show_prefs() { # outer inner
+        local before
+        before=$(window_count)
+        gnome-extensions prefs "$UUID" >>"$SESSION_DIR/windows.log" 2>&1 &
+        if ! wait_until "[ \"\$(window_count)\" -gt $before ]" 20; then
+            fail "the preferences never appeared"
+            return 1
+        fi
+        shell_eval 'let w = global.get_window_actors().at(-1).meta_window;
+                    w.activate(global.get_current_time()); "activated"' >/dev/null
+        # Long enough to read the rows before either number moves.
+        sleep 2.2
+        set_gap snap-outer-gap "$1"
+        sleep 1.8
+        set_gap snap-inner-gap "$2"
+        sleep 2.2
+
+        key_press $KEY_Alt_L; key_press $KEY_F4; key_release $KEY_F4; key_release $KEY_Alt_L
+        wait_until "[ \"\$(window_count)\" -eq $before ]" 10 || fail "the preferences never closed"
+
+        shell_eval 'let w = global.get_window_actors().at(-1).meta_window;
+                    w.activate(global.get_current_time()); "activated"' >/dev/null
+        settle
+        sleep 0.5
+    }
+
+    tour_all
+    sleep 0.5
+    show_prefs 30 30
+    tour_all
 
     sleep 1
     stop_recording
+    set_gap snap-outer-gap 0
+    set_gap snap-inner-gap 0
     echo "      recorded $RECORDING_FILE" >&2
 }

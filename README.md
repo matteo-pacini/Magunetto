@@ -11,7 +11,7 @@ Inspired by [Loop](https://github.com/MrKai77/Loop) on macOS.
 
 ## How it works
 
-![The region outlined as each sector is chosen, and the window snapping to it](assets/demo.gif)
+![Each sector chosen in turn and the window snapping to it, then both gaps set in the preferences and the same tour again, inset](assets/demo.gif)
 
 Hold **Alt** and tap **Z**. A radial menu appears where the pointer is. Keep Alt held and move the
 mouse:

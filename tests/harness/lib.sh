@@ -328,6 +328,7 @@ wait_until() {
 
 # --- gestures -----------------------------------------------------------------
 
+KEY_F4=65473
 KEY_F9=65478
 
 # The default shortcut is <Alt>z, so Alt is the modifier whose release commits.
