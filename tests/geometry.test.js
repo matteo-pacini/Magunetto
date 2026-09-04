@@ -130,3 +130,108 @@ test('every rectangle stays within the work area', () => {
         }
     }
 });
+
+// Gap pairs: none, even, an odd inner that would put a seam on a half pixel if
+// the halves were inset separately, and both at the schema's upper bound.
+const GAPS = [
+    {outer: 0, inner: 0},
+    {outer: 8, inner: 12},
+    {outer: 5, inner: 7},
+    {outer: 100, inner: 100},
+];
+
+const QUARTERS = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+
+test('no gaps reproduces the two-argument rectangles', () => {
+    for (const area of AREAS) {
+        for (const sector of [CENTRE, ...DIRECTIONS])
+            assert.deepEqual(rectFor(sector, area, {outer: 0, inner: 0}), rectFor(sector, area));
+    }
+});
+
+test('halves are the outer gap from the edges and the inner gap apart', () => {
+    for (const area of AREAS) {
+        for (const gaps of GAPS) {
+            const left = rectFor('left', area, gaps);
+            const right = rectFor('right', area, gaps);
+            assert.equal(left.x, area.x + gaps.outer, 'left half starts an outer gap in');
+            assert.equal(right.x - (left.x + left.width), gaps.inner, 'halves are an inner gap apart');
+            assert.equal(right.x + right.width, area.x + area.width - gaps.outer,
+                'right half ends an outer gap short');
+            assert.ok(Math.abs(left.width - right.width) <= 1, 'halves differ by at most a pixel');
+            for (const half of [left, right]) {
+                assert.equal(half.y, area.y + gaps.outer, 'half is an outer gap from the top');
+                assert.equal(half.height, area.height - 2 * gaps.outer,
+                    'half is an outer gap from the bottom');
+            }
+
+            const top = rectFor('top', area, gaps);
+            const bottom = rectFor('bottom', area, gaps);
+            assert.equal(top.y, area.y + gaps.outer);
+            assert.equal(bottom.y - (top.y + top.height), gaps.inner);
+            assert.equal(bottom.y + bottom.height, area.y + area.height - gaps.outer);
+            assert.ok(Math.abs(top.height - bottom.height) <= 1);
+            for (const half of [top, bottom]) {
+                assert.equal(half.x, area.x + gaps.outer);
+                assert.equal(half.width, area.width - 2 * gaps.outer);
+            }
+        }
+    }
+});
+
+test('quarters compose the two axes and leave one seam per axis', () => {
+    for (const area of AREAS) {
+        for (const gaps of GAPS) {
+            const [tl, tr, bl, br] = QUARTERS.map(sector => rectFor(sector, area, gaps));
+
+            assert.equal(tl.x, area.x + gaps.outer);
+            assert.equal(tl.y, area.y + gaps.outer);
+            assert.equal(br.x + br.width, area.x + area.width - gaps.outer);
+            assert.equal(br.y + br.height, area.y + area.height - gaps.outer);
+
+            assert.equal(tr.x - (tl.x + tl.width), gaps.inner, 'top quarters an inner gap apart');
+            assert.equal(bl.y - (tl.y + tl.height), gaps.inner, 'left quarters an inner gap apart');
+            assert.equal(br.x - (bl.x + bl.width), gaps.inner, 'bottom quarters an inner gap apart');
+            assert.equal(br.y - (tr.y + tr.height), gaps.inner, 'right quarters an inner gap apart');
+
+            // Opposite corners see the same single seam on each axis.
+            assert.equal(br.x - (tl.x + tl.width), gaps.inner);
+            assert.equal(br.y - (tl.y + tl.height), gaps.inner);
+
+            // A quarter is its half's column crossed with its half's row.
+            assert.deepEqual([tl.x, tl.width], [rectFor('left', area, gaps).x, rectFor('left', area, gaps).width]);
+            assert.deepEqual([tl.y, tl.height], [rectFor('top', area, gaps).y, rectFor('top', area, gaps).height]);
+        }
+    }
+});
+
+test('centre action is inset by the outer gap alone', () => {
+    for (const area of AREAS) {
+        for (const gaps of GAPS) {
+            const expected = {
+                x: area.x + gaps.outer,
+                y: area.y + gaps.outer,
+                width: area.width - 2 * gaps.outer,
+                height: area.height - 2 * gaps.outer,
+            };
+            assert.deepEqual(rectFor(CENTRE, area, gaps), expected);
+            assert.deepEqual(rectFor(CENTRE, area, {...gaps, inner: 0}), expected,
+                'inner gap has no effect on the centre action');
+        }
+    }
+});
+
+test('every gapped rectangle has positive size and stays within the work area', () => {
+    for (const area of AREAS) {
+        for (const gaps of GAPS) {
+            for (const sector of [CENTRE, ...DIRECTIONS]) {
+                const r = rectFor(sector, area, gaps);
+                assert.ok(r.width > 0 && r.height > 0, `${sector} has positive size`);
+                assert.ok(r.x >= area.x + gaps.outer);
+                assert.ok(r.x + r.width <= area.x + area.width - gaps.outer);
+                assert.ok(r.y >= area.y + gaps.outer);
+                assert.ok(r.y + r.height <= area.y + area.height - gaps.outer);
+            }
+        }
+    }
+});

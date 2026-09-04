@@ -36,5 +36,24 @@
         back to "quint".
       </description>
     </key>
+    <key name="snap-outer-gap" type="i">
+      <range min="0" max="100"/>
+      <default>0</default>
+      <summary>Outer gap</summary>
+      <description>
+        Space, in pixels, between a snapped window and the edge of the work
+        area, on all four sides.
+      </description>
+    </key>
+    <key name="snap-inner-gap" type="i">
+      <range min="0" max="100"/>
+      <default>0</default>
+      <summary>Inner gap</summary>
+      <description>
+        Total space, in pixels, between two windows snapped to neighbouring
+        regions. Filling the work area ignores this and honours the outer gap
+        alone.
+      </description>
+    </key>
   </schema>
 </schemalist>

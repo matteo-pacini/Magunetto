@@ -22,6 +22,8 @@ DEFAULT_MONITORS=1280x800
 DEFAULT_SHORTCUT="['<Alt>z']"
 DEFAULT_ANIMATION=true
 DEFAULT_PREVIEW=true
+DEFAULT_OUTER_GAP=0
+DEFAULT_INNER_GAP=0
 DEFAULT_CURVE="'quint'"
 # The desktop's own switch, which zeroes every easing duration in the shell.
 DEFAULT_DESKTOP_ANIMATIONS=true
@@ -59,6 +61,7 @@ stop_session() {
 
 start_session() {
     local monitors=$1 shortcut=$2 animation=$3 curve=$4 desktop_animations=$5 preview=$6
+    local outer_gap=$7 inner_gap=$8
 
     SESSION_DIR=$(mktemp -d "$ROOT_DIR/session.XXXXXX")
     mkdir -p "$SESSION_DIR/data/gnome-shell/extensions" "$SESSION_DIR/config"
@@ -90,6 +93,8 @@ show-radial-menu=$shortcut
 snap-animation=$animation
 snap-preview=$preview
 snap-animation-curve=$curve
+snap-outer-gap=$outer_gap
+snap-inner-gap=$inner_gap
 KEYFILE
 
     local args=(--headless --unsafe-mode --wayland-display "magunetto-$$")
@@ -125,12 +130,12 @@ KEYFILE
         return 1
     fi
 
-    SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations|$preview"
+    SESSION_PROFILE="$monitors|$shortcut|$animation|$curve|$desktop_animations|$preview|$outer_gap|$inner_gap"
     return 0
 }
 
 ensure_session() {
-    local wanted="$1|$2|$3|$4|$5|$6"
+    local wanted="$1|$2|$3|$4|$5|$6|$7|$8"
     [ "$SESSION_PROFILE" = "$wanted" ] && return 0
     stop_session
     start_session "$@"
@@ -156,13 +161,16 @@ run_case() {
     CASE_PREVIEW=$DEFAULT_PREVIEW
     CASE_CURVE=$DEFAULT_CURVE
     CASE_DESKTOP_ANIMATIONS=$DEFAULT_DESKTOP_ANIMATIONS
+    CASE_OUTER_GAP=$DEFAULT_OUTER_GAP
+    CASE_INNER_GAP=$DEFAULT_INNER_GAP
     unset -f case_body 2>/dev/null
 
     # shellcheck disable=SC1090
     source "$file"
 
     if ! ensure_session "$CASE_MONITORS" "$CASE_SHORTCUT" "$CASE_ANIMATION" \
-                        "$CASE_CURVE" "$CASE_DESKTOP_ANIMATIONS" "$CASE_PREVIEW"; then
+                        "$CASE_CURVE" "$CASE_DESKTOP_ANIMATIONS" "$CASE_PREVIEW" \
+                        "$CASE_OUTER_GAP" "$CASE_INNER_GAP"; then
         echo "  $name: SESSION FAILED"
         TOTAL_FAILURES=$((TOTAL_FAILURES + 1))
         return
@@ -213,7 +221,7 @@ fi
 # distinct profile rather than once per case.
 mapfile -t CASES < <(
     for file in "${CASES[@]}"; do
-        profile=$(grep -hE '^CASE_(MONITORS|SHORTCUT|ANIMATION|CURVE|DESKTOP_ANIMATIONS)=' \
+        profile=$(grep -hE '^CASE_(MONITORS|SHORTCUT|ANIMATION|PREVIEW|CURVE|DESKTOP_ANIMATIONS|OUTER_GAP|INNER_GAP)=' \
             "$file" | sort | tr '\n' ' ')
         echo "$profile|$file"
     done | sort | cut -d'|' -f2-

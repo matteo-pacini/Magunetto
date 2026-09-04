@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 22:57+0100\n"
+"POT-Creation-Date: 2026-09-04 08:14+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
 "Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
 "Magunetto/issues>\n"
@@ -18,47 +18,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:35
 msgid "Radial menu shortcut"
 msgstr "Raccourci du menu radial"
 
-#: magunetto@matteopacini.me/prefs.js:31
+#: magunetto@matteopacini.me/prefs.js:36
 msgid "Hold to raise the menu, release to snap"
 msgstr "Maintenir pour afficher le menu, relâcher pour placer la fenêtre"
 
-#: magunetto@matteopacini.me/prefs.js:55
+#: magunetto@matteopacini.me/prefs.js:60
 msgid "Snapping"
 msgstr "Placement"
 
-#: magunetto@matteopacini.me/prefs.js:61
+#: magunetto@matteopacini.me/prefs.js:66
 msgid "Preview"
 msgstr "Aperçu"
 
-#: magunetto@matteopacini.me/prefs.js:62
+#: magunetto@matteopacini.me/prefs.js:67
 msgid "Outline the region while the menu is up"
 msgstr "Encadrer la zone tant que le menu est affiché"
 
-#: magunetto@matteopacini.me/prefs.js:68
+#: magunetto@matteopacini.me/prefs.js:73
 msgid "Animate"
 msgstr "Animer"
 
-#: magunetto@matteopacini.me/prefs.js:69
+#: magunetto@matteopacini.me/prefs.js:74
 msgid "Show the window travelling to its new region"
 msgstr "Afficher le déplacement de la fenêtre vers sa nouvelle zone"
 
-#: magunetto@matteopacini.me/prefs.js:75
+#: magunetto@matteopacini.me/prefs.js:80
 msgid "Style"
 msgstr "Style"
 
-#: magunetto@matteopacini.me/prefs.js:113
+#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:42
+msgid "Outer gap"
+msgstr "Marge extérieure"
+
+#: magunetto@matteopacini.me/prefs.js:115
+msgid "Space between a window and the edge of the screen"
+msgstr "Espace entre une fenêtre et le bord de l'écran"
+
+#: magunetto@matteopacini.me/prefs.js:122
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:51
+msgid "Inner gap"
+msgstr "Marge intérieure"
+
+#: magunetto@matteopacini.me/prefs.js:123
+msgid "Space between two windows snapped side by side"
+msgstr "Espace entre deux fenêtres placées côte à côte"
+
+#: magunetto@matteopacini.me/prefs.js:134
 msgid "Press a shortcut"
 msgstr "Saisissez un raccourci"
 
-#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/prefs.js:135
 msgid "The shortcut must include a modifier key."
 msgstr "Le raccourci doit comporter une touche modificatrice."
 
-#: magunetto@matteopacini.me/prefs.js:116
+#: magunetto@matteopacini.me/prefs.js:137
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -171,3 +189,15 @@ msgstr ""
 "Manière dont la fenêtre se déplace jusqu’à sa zone. L’une des valeurs "
 "« expo », « quint », « md », « cubic », « quad », « spring », « back ». Une "
 "valeur non reconnue est remplacée par « quint »."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:43
+msgid ""
+"Space, in pixels, between a snapped window and the edge of the work area, on "
+"all four sides."
+msgstr "Espace, en pixels, entre une fenêtre placée et le bord de la zone de travail, sur les quatre côtés."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:52
+msgid ""
+"Total space, in pixels, between two windows snapped to neighbouring regions. "
+"Filling the work area ignores this and honours the outer gap alone."
+msgstr "Espace total, en pixels, entre deux fenêtres placées dans des zones voisines. Le remplissage de la zone de travail l'ignore et ne respecte que la marge extérieure."

@@ -10,6 +10,11 @@ const KEY = 'show-radial-menu';
 const PREVIEW_KEY = 'snap-preview';
 const ANIMATION_KEY = 'snap-animation';
 const CURVE_KEY = 'snap-animation-curve';
+const OUTER_GAP_KEY = 'snap-outer-gap';
+const INNER_GAP_KEY = 'snap-inner-gap';
+
+// The schema bounds the keys, but a spin row cannot read a schema range.
+const GAP_MAX = 100;
 
 // A shortcut with no modifier cannot be committed by releasing one, so the
 // gesture would only ever end on the dismissal timeout.
@@ -104,6 +109,22 @@ export default class MagunettoPreferences extends ExtensionPreferences {
         // The style is inert while the animation is off.
         settings.bind(ANIMATION_KEY, style, 'sensitive', Gio.SettingsBindFlags.GET);
         group.add(style);
+
+        const outer = new Adw.SpinRow({
+            title: this.gettext('Outer gap'),
+            subtitle: this.gettext('Space between a window and the edge of the screen'),
+            adjustment: new Gtk.Adjustment({lower: 0, upper: GAP_MAX, step_increment: 1}),
+        });
+        settings.bind(OUTER_GAP_KEY, outer, 'value', Gio.SettingsBindFlags.DEFAULT);
+        group.add(outer);
+
+        const inner = new Adw.SpinRow({
+            title: this.gettext('Inner gap'),
+            subtitle: this.gettext('Space between two windows snapped side by side'),
+            adjustment: new Gtk.Adjustment({lower: 0, upper: GAP_MAX, step_increment: 1}),
+        });
+        settings.bind(INNER_GAP_KEY, inner, 'value', Gio.SettingsBindFlags.DEFAULT);
+        group.add(inner);
 
         return group;
     }

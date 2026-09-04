@@ -44,8 +44,8 @@ export function workAreaFor(monitorIndex) {
 // the window would answer with the monitor it is leaving, since the rectangle is
 // computed before the move; and after the move mutter may decline to reassign it
 // at all, holding a window to its old monitor when the two differ in scale.
-export function snap(window, sector, curve, monitorIndex) {
-    const rect = rectFor(sector, workAreaFor(monitorIndex));
+export function snap(window, sector, curve, monitorIndex, gaps) {
+    const rect = rectFor(sector, workAreaFor(monitorIndex), gaps);
     if (!rect)
         return null;
 

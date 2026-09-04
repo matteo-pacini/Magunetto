@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 22:57+0100\n"
+"POT-Creation-Date: 2026-09-04 08:14+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
 "Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
 "Magunetto/issues>\n"
@@ -19,47 +19,65 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:35
 msgid "Radial menu shortcut"
 msgstr "Комбинация клавиш радиального меню"
 
-#: magunetto@matteopacini.me/prefs.js:31
+#: magunetto@matteopacini.me/prefs.js:36
 msgid "Hold to raise the menu, release to snap"
 msgstr "Удерживайте для вызова меню, отпустите для привязки окна"
 
-#: magunetto@matteopacini.me/prefs.js:55
+#: magunetto@matteopacini.me/prefs.js:60
 msgid "Snapping"
 msgstr "Привязка"
 
-#: magunetto@matteopacini.me/prefs.js:61
+#: magunetto@matteopacini.me/prefs.js:66
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: magunetto@matteopacini.me/prefs.js:62
+#: magunetto@matteopacini.me/prefs.js:67
 msgid "Outline the region while the menu is up"
 msgstr "Показывать контур области, пока меню открыто"
 
-#: magunetto@matteopacini.me/prefs.js:68
+#: magunetto@matteopacini.me/prefs.js:73
 msgid "Animate"
 msgstr "Анимация"
 
-#: magunetto@matteopacini.me/prefs.js:69
+#: magunetto@matteopacini.me/prefs.js:74
 msgid "Show the window travelling to its new region"
 msgstr "Показывать перемещение окна в новую область"
 
-#: magunetto@matteopacini.me/prefs.js:75
+#: magunetto@matteopacini.me/prefs.js:80
 msgid "Style"
 msgstr "Стиль"
 
-#: magunetto@matteopacini.me/prefs.js:113
+#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:42
+msgid "Outer gap"
+msgstr "Внешний отступ"
+
+#: magunetto@matteopacini.me/prefs.js:115
+msgid "Space between a window and the edge of the screen"
+msgstr "Расстояние между окном и краем экрана"
+
+#: magunetto@matteopacini.me/prefs.js:122
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:51
+msgid "Inner gap"
+msgstr "Внутренний отступ"
+
+#: magunetto@matteopacini.me/prefs.js:123
+msgid "Space between two windows snapped side by side"
+msgstr "Расстояние между двумя окнами, привязанными рядом"
+
+#: magunetto@matteopacini.me/prefs.js:134
 msgid "Press a shortcut"
 msgstr "Нажмите комбинацию клавиш"
 
-#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/prefs.js:135
 msgid "The shortcut must include a modifier key."
 msgstr "Комбинация должна включать клавишу-модификатор."
 
-#: magunetto@matteopacini.me/prefs.js:116
+#: magunetto@matteopacini.me/prefs.js:137
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -175,3 +193,15 @@ msgstr ""
 "Как окно движется на пути к своей области. Одно из значений: «expo», "
 "«quint», «md», «cubic», «quad», «spring», «back». Нераспознанное значение "
 "заменяется на «quint»."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:43
+msgid ""
+"Space, in pixels, between a snapped window and the edge of the work area, on "
+"all four sides."
+msgstr "Расстояние в пикселях между привязанным окном и краем рабочей области, со всех четырёх сторон."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:52
+msgid ""
+"Total space, in pixels, between two windows snapped to neighbouring regions. "
+"Filling the work area ignores this and honours the outer gap alone."
+msgstr "Общее расстояние в пикселях между двумя окнами, привязанными к соседним областям. При заполнении рабочей области это значение не учитывается, и действует только внешний отступ."

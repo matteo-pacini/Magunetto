@@ -50,16 +50,24 @@ export function sectorFor(dx, dy) {
     return DIRECTIONS[((index % DIRECTIONS.length) + DIRECTIONS.length) % DIRECTIONS.length];
 }
 
-// Splitting with floor for the near half and taking the remainder for the far
-// half keeps adjacent halves abutting exactly on odd-sized work areas.
-function splitHorizontal(area) {
-    const leftWidth = Math.floor(area.width / 2);
-    return {leftWidth, rightWidth: area.width - leftWidth};
+export const NO_GAPS = {outer: 0, inner: 0};
+
+// The gaps come out of the span before it is divided, so every edge lands on a
+// whole pixel: insetting each half by inner / 2 afterwards would put the seam on
+// a half pixel whenever inner is odd. Splitting with floor for the near half and
+// taking the remainder for the far half keeps the two within a pixel of each
+// other, and abutting exactly when the gap is zero.
+function split(start, span, {outer, inner}) {
+    const usable = span - 2 * outer - inner;
+    const near = Math.floor(usable / 2);
+    return {
+        near: {start: start + outer, size: near},
+        far: {start: start + outer + near + inner, size: usable - near},
+    };
 }
 
-function splitVertical(area) {
-    const topHeight = Math.floor(area.height / 2);
-    return {topHeight, bottomHeight: area.height - topHeight};
+function whole(start, span, {outer}) {
+    return {start: start + outer, size: span - 2 * outer};
 }
 
 /**
@@ -67,38 +75,42 @@ function splitVertical(area) {
  *
  * @param {string} sector NONE, CENTRE, or one of DIRECTIONS
  * @param {{x: number, y: number, width: number, height: number}} area work area
+ * @param {{outer: number, inner: number}} [gaps] outer is the space between a
+ *   region and the work area edge, on every side; inner is the total space
+ *   between two adjacent regions. The centre action honours outer alone.
  * @returns {?{x: number, y: number, width: number, height: number}} null when
  *   the sector selects nothing
  */
-export function rectFor(sector, area) {
+export function rectFor(sector, area, gaps = NO_GAPS) {
     if (sector === NONE)
         return null;
-    if (sector === CENTRE)
-        return {x: area.x, y: area.y, width: area.width, height: area.height};
 
-    const {leftWidth, rightWidth} = splitHorizontal(area);
-    const {topHeight, bottomHeight} = splitVertical(area);
+    const {near: left, far: right} = split(area.x, area.width, gaps);
+    const {near: top, far: bottom} = split(area.y, area.height, gaps);
+    const wide = whole(area.x, area.width, gaps);
+    const tall = whole(area.y, area.height, gaps);
 
-    const midX = area.x + leftWidth;
-    const midY = area.y + topHeight;
+    const rect = (h, v) => ({x: h.start, y: v.start, width: h.size, height: v.size});
 
     switch (sector) {
+    case CENTRE:
+        return rect(wide, tall);
     case 'left':
-        return {x: area.x, y: area.y, width: leftWidth, height: area.height};
+        return rect(left, tall);
     case 'right':
-        return {x: midX, y: area.y, width: rightWidth, height: area.height};
+        return rect(right, tall);
     case 'top':
-        return {x: area.x, y: area.y, width: area.width, height: topHeight};
+        return rect(wide, top);
     case 'bottom':
-        return {x: area.x, y: midY, width: area.width, height: bottomHeight};
+        return rect(wide, bottom);
     case 'top-left':
-        return {x: area.x, y: area.y, width: leftWidth, height: topHeight};
+        return rect(left, top);
     case 'top-right':
-        return {x: midX, y: area.y, width: rightWidth, height: topHeight};
+        return rect(right, top);
     case 'bottom-left':
-        return {x: area.x, y: midY, width: leftWidth, height: bottomHeight};
+        return rect(left, bottom);
     case 'bottom-right':
-        return {x: midX, y: midY, width: rightWidth, height: bottomHeight};
+        return rect(right, bottom);
     default:
         throw new Error(`unknown sector: ${sector}`);
     }

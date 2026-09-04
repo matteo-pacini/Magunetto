@@ -1,6 +1,6 @@
 # Translating Magunetto
 
-Thirty-three strings, about two hundred and thirty words. The source language is **British
+Thirty-nine strings, about three hundred words. The source language is **British
 English**; American English is a catalogue like any other.
 
 ## What the extension does
@@ -32,6 +32,12 @@ descriptions that `dconf-editor` and `gsettings describe` show.
   |  | Style                                       Snappy  v  |  |  <- row title, list item
   |  | Most of the move happens at once, then it settles.     |  |  <- list item description
   |  +--------------------------------------------------------+  |
+  |  | Outer gap                                    [  0 -+]  |  |  <- row title
+  |  | Space between a window and the edge of the screen      |  |  <- row subtitle
+  |  +--------------------------------------------------------+  |
+  |  | Inner gap                                    [  0 -+]  |  |  <- row title
+  |  | Space between two windows snapped side by side         |  |  <- row subtitle
+  |  +--------------------------------------------------------+  |
   |                                                              |
   +--------------------------------------------------------------+
 
@@ -57,6 +63,10 @@ descriptions that `dconf-editor` and `gsettings describe` show.
 | `Animate` | switch row title | one word, a verb |
 | `Show the window travelling to its new region` | row subtitle | one clause, no full stop |
 | `Style` | row title | one word |
+| `Outer gap` | spin row title, and a settings summary | 2–3 words, distinct from *Inner gap* |
+| `Space between a window and the edge of the screen` | row subtitle | one clause, no full stop |
+| `Inner gap` | spin row title, and a settings summary | 2–3 words, distinct from *Outer gap* |
+| `Space between two windows snapped side by side` | row subtitle | one clause, no full stop |
 | `Press a shortcut` | dialog heading | 2–3 words, an instruction |
 | `The shortcut must include a modifier key.` | dialog body | one sentence, with a full stop |
 | `Cancel` | button | one word — use whatever your language's GNOME uses |
@@ -85,8 +95,15 @@ rest. *Spring* and *Overshoot* both go past the destination and come back; the d
 
 ### The settings descriptions
 
-Seen only in `dconf-editor` and `gsettings describe`. Four summaries and four descriptions, in a
-plainer register than the dialog — these are documentation, not interface.
+Seen only in `dconf-editor` and `gsettings describe`. Six summaries and six descriptions, in a
+plainer register than the dialog — these are documentation, not interface. The two gap summaries
+are the same strings as the two gap row titles, so they are translated once.
+
+The two gap descriptions define the settings, and the definitions must survive translation: the
+*inner* gap is the **total** distance between two windows, not a margin each one keeps; the *outer*
+gap applies on all four sides; and filling the work area uses the outer gap alone. Where your
+language's GNOME already has a word for the space between tiled windows — Tiling Assistant and Pop
+Shell ship catalogues — use it.
 
 ## Rules
 

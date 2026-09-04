@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 22:57+0100\n"
+"POT-Creation-Date: 2026-09-04 08:14+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
 "Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
 "Magunetto/issues>\n"
@@ -20,47 +20,65 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:35
 msgid "Radial menu shortcut"
 msgstr "Скорочення радіального меню"
 
-#: magunetto@matteopacini.me/prefs.js:31
+#: magunetto@matteopacini.me/prefs.js:36
 msgid "Hold to raise the menu, release to snap"
 msgstr "Утримуйте, щоб показати меню, відпустіть, щоб прикріпити вікно"
 
-#: magunetto@matteopacini.me/prefs.js:55
+#: magunetto@matteopacini.me/prefs.js:60
 msgid "Snapping"
 msgstr "Прикріплення"
 
-#: magunetto@matteopacini.me/prefs.js:61
+#: magunetto@matteopacini.me/prefs.js:66
 msgid "Preview"
 msgstr "Попередній перегляд"
 
-#: magunetto@matteopacini.me/prefs.js:62
+#: magunetto@matteopacini.me/prefs.js:67
 msgid "Outline the region while the menu is up"
 msgstr "Показувати контур ділянки, доки меню відкрите"
 
-#: magunetto@matteopacini.me/prefs.js:68
+#: magunetto@matteopacini.me/prefs.js:73
 msgid "Animate"
 msgstr "Анімувати"
 
-#: magunetto@matteopacini.me/prefs.js:69
+#: magunetto@matteopacini.me/prefs.js:74
 msgid "Show the window travelling to its new region"
 msgstr "Показувати, як вікно рухається до нової ділянки"
 
-#: magunetto@matteopacini.me/prefs.js:75
+#: magunetto@matteopacini.me/prefs.js:80
 msgid "Style"
 msgstr "Стиль"
 
-#: magunetto@matteopacini.me/prefs.js:113
+#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:42
+msgid "Outer gap"
+msgstr "Зовнішній відступ"
+
+#: magunetto@matteopacini.me/prefs.js:115
+msgid "Space between a window and the edge of the screen"
+msgstr "Відстань між вікном і краєм екрана"
+
+#: magunetto@matteopacini.me/prefs.js:122
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:51
+msgid "Inner gap"
+msgstr "Внутрішній відступ"
+
+#: magunetto@matteopacini.me/prefs.js:123
+msgid "Space between two windows snapped side by side"
+msgstr "Відстань між двома вікнами, прикріпленими поруч"
+
+#: magunetto@matteopacini.me/prefs.js:134
 msgid "Press a shortcut"
 msgstr "Натисніть скорочення"
 
-#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/prefs.js:135
 msgid "The shortcut must include a modifier key."
 msgstr "Скорочення має містити клавішу-модифікатор."
 
-#: magunetto@matteopacini.me/prefs.js:116
+#: magunetto@matteopacini.me/prefs.js:137
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -145,8 +163,8 @@ msgid ""
 "Whether the region a window would be given is outlined while the menu is up, "
 "so the choice can be seen before it is made."
 msgstr ""
-"Чи окреслюється контуром ділянка, яку отримає вікно, доки меню відкрите, "
-"щоб вибір було видно ще до його підтвердження."
+"Чи окреслюється контуром ділянка, яку отримає вікно, доки меню відкрите, щоб "
+"вибір було видно ще до його підтвердження."
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
@@ -173,3 +191,15 @@ msgstr ""
 "Як вікно рухається на шляху до своєї ділянки. Одне зі значень «expo», "
 "«quint», «md», «cubic», «quad», «spring», «back». Нерозпізнане значення "
 "замінюється на «quint»."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:43
+msgid ""
+"Space, in pixels, between a snapped window and the edge of the work area, on "
+"all four sides."
+msgstr "Відстань у пікселях між прикріпленим вікном і краєм робочої області, з усіх чотирьох боків."
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:52
+msgid ""
+"Total space, in pixels, between two windows snapped to neighbouring regions. "
+"Filling the work area ignores this and honours the outer gap alone."
+msgstr "Загальна відстань у пікселях між двома вікнами, прикріпленими до сусідніх ділянок. Під час заповнення робочої області це значення не враховується, і діє лише зовнішній відступ."

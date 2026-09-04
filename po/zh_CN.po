@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Magunetto\n"
 "Report-Msgid-Bugs-To: https://github.com/matteo-pacini/Magunetto/issues\n"
-"POT-Creation-Date: 2026-08-29 22:57+0100\n"
+"POT-Creation-Date: 2026-09-04 08:14+0100\n"
 "PO-Revision-Date: 2026-08-29 12:00+0000\n"
 "Last-Translator: Magunetto project <https://github.com/matteo-pacini/"
 "Magunetto/issues>\n"
@@ -18,47 +18,65 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: magunetto@matteopacini.me/prefs.js:30
+#: magunetto@matteopacini.me/prefs.js:35
 msgid "Radial menu shortcut"
 msgstr "环形菜单快捷键"
 
-#: magunetto@matteopacini.me/prefs.js:31
+#: magunetto@matteopacini.me/prefs.js:36
 msgid "Hold to raise the menu, release to snap"
 msgstr "按住呼出菜单，松开完成吸附"
 
-#: magunetto@matteopacini.me/prefs.js:55
+#: magunetto@matteopacini.me/prefs.js:60
 msgid "Snapping"
 msgstr "吸附"
 
-#: magunetto@matteopacini.me/prefs.js:61
+#: magunetto@matteopacini.me/prefs.js:66
 msgid "Preview"
 msgstr "预览"
 
-#: magunetto@matteopacini.me/prefs.js:62
+#: magunetto@matteopacini.me/prefs.js:67
 msgid "Outline the region while the menu is up"
 msgstr "菜单显示期间勾勒出目标区域"
 
-#: magunetto@matteopacini.me/prefs.js:68
+#: magunetto@matteopacini.me/prefs.js:73
 msgid "Animate"
 msgstr "动画"
 
-#: magunetto@matteopacini.me/prefs.js:69
+#: magunetto@matteopacini.me/prefs.js:74
 msgid "Show the window travelling to its new region"
 msgstr "显示窗口移向新区域的过程"
 
-#: magunetto@matteopacini.me/prefs.js:75
+#: magunetto@matteopacini.me/prefs.js:80
 msgid "Style"
 msgstr "样式"
 
-#: magunetto@matteopacini.me/prefs.js:113
+#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:42
+msgid "Outer gap"
+msgstr "外边距"
+
+#: magunetto@matteopacini.me/prefs.js:115
+msgid "Space between a window and the edge of the screen"
+msgstr "窗口与屏幕边缘之间的间距"
+
+#: magunetto@matteopacini.me/prefs.js:122
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:51
+msgid "Inner gap"
+msgstr "内边距"
+
+#: magunetto@matteopacini.me/prefs.js:123
+msgid "Space between two windows snapped side by side"
+msgstr "并排吸附的两个窗口之间的间距"
+
+#: magunetto@matteopacini.me/prefs.js:134
 msgid "Press a shortcut"
 msgstr "请按下快捷键"
 
-#: magunetto@matteopacini.me/prefs.js:114
+#: magunetto@matteopacini.me/prefs.js:135
 msgid "The shortcut must include a modifier key."
 msgstr "快捷键必须包含修饰键。"
 
-#: magunetto@matteopacini.me/prefs.js:116
+#: magunetto@matteopacini.me/prefs.js:137
 msgid "Cancel"
 msgstr "取消"
 
@@ -139,7 +157,8 @@ msgstr "预览目标区域"
 msgid ""
 "Whether the region a window would be given is outlined while the menu is up, "
 "so the choice can be seen before it is made."
-msgstr "菜单显示期间是否勾勒出窗口将要占据的区域，以便在做出选择之前就能看到结果。"
+msgstr ""
+"菜单显示期间是否勾勒出窗口将要占据的区域，以便在做出选择之前就能看到结果。"
 
 #: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:24
 msgid "Animate snapping"
@@ -164,3 +183,15 @@ msgstr ""
 "窗口移向所在区域时的运动方式。可选值"
 "为“expo”、“quint”、“md”、“cubic”、“quad”、“spring”、“back”。无法识别的值将回"
 "退为“quint”。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:43
+msgid ""
+"Space, in pixels, between a snapped window and the edge of the work area, on "
+"all four sides."
+msgstr "吸附后的窗口与工作区边缘之间的间距（像素），四边均适用。"
+
+#: magunetto@matteopacini.me/schemas/org.gnome.shell.extensions.magunetto.gschema.xml:52
+msgid ""
+"Total space, in pixels, between two windows snapped to neighbouring regions. "
+"Filling the work area ignores this and honours the outer gap alone."
+msgstr "吸附到相邻区域的两个窗口之间的总间距（像素）。填满工作区时忽略此值，仅应用外边距。"

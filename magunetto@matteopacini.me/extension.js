@@ -29,6 +29,7 @@ export default class MagunettoExtension extends Extension {
         this._gestureMonitor = null;
         this._preview = null;
         this._previewEnabled = false;
+        this._gaps = null;
         this._settings = this.getSettings();
 
         const action = Main.wm.addKeybinding(
@@ -65,6 +66,7 @@ export default class MagunettoExtension extends Extension {
 
         this._targetWindow = null;
         this._gestureMonitor = null;
+        this._gaps = null;
         this._settings = null;
         this._log = null;
     }
@@ -133,8 +135,14 @@ export default class MagunettoExtension extends Extension {
         this._gestureMonitor = monitor ? monitor.index : target.get_monitor();
 
         // Read as the gesture starts rather than cached, so a preference change
-        // applies to the next gesture without reloading the extension.
+        // applies to the next gesture without reloading the extension. The gaps
+        // are held for the whole gesture: the outline and the landing are the
+        // same rectangle only if both are computed from the same values.
         this._previewEnabled = this._settings.get_boolean('snap-preview');
+        this._gaps = {
+            outer: this._settings.get_int('snap-outer-gap'),
+            inner: this._settings.get_int('snap-inner-gap'),
+        };
 
         const menu = new RadialMenu({
             monitorIndex: this._gestureMonitor,
@@ -166,7 +174,7 @@ export default class MagunettoExtension extends Extension {
         if (!this._previewEnabled)
             return;
 
-        const rect = rectFor(sector, workAreaFor(this._gestureMonitor));
+        const rect = rectFor(sector, workAreaFor(this._gestureMonitor), this._gaps);
         if (!rect) {
             // rectFor answers null for the dead zone, which is exactly when
             // releasing would place nothing and so nothing should be shown.
@@ -222,7 +230,7 @@ export default class MagunettoExtension extends Extension {
             ? curveFor(this._settings.get_string('snap-animation-curve'))
             : null;
 
-        snap(target, sector, curve, this._gestureMonitor);
+        snap(target, sector, curve, this._gestureMonitor, this._gaps);
         this.record(`snapped:${sector}`);
     }
 }
