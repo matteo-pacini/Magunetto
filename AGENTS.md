@@ -131,6 +131,13 @@ These cost hours to rediscover.
 - **Test sessions need a throwaway `HOME` *and* `GSETTINGS_BACKEND=keyfile`.** With only the first,
   GSettings reaches the real dconf service over the session bus and writes land in the developer's
   desktop configuration. This has already happened once.
+- **A D-Bus activated service does not inherit the session's environment.** `dbus-run-session`
+  starts the bus before `run.sh` exports the throwaway `HOME` and the keyfile backend, so anything
+  the bus activates later gets the developer's real environment instead — real `HOME`, real dconf.
+  The preferences dialog is activated that way: it read the desktop's settings, showed schema
+  defaults for everything the session had set, and would have written to the developer's own dconf
+  had anything clicked a row. `start_session` calls `dbus-update-activation-environment` to seal
+  it. The symptom is a helper that quietly disagrees with the shell about every setting.
 - **`org.gnome.Shell.Eval` answers `(true, '<json>')`, or `(false, '')` when refused.** Match the
   quoted value. `grep -q false` matches the *refusal*, which silently turns a check into a no-op.
 - **Eval and Screenshot need `gnome-shell --unsafe-mode`.** In a NixOS VM, override the template unit

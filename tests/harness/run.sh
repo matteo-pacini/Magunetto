@@ -103,6 +103,15 @@ KEYFILE
         args+=(--virtual-monitor "$spec")
     done
 
+    # dbus-run-session starts the bus before any of the above is exported, so a
+    # service activated on that bus inherits the developer's real environment —
+    # real HOME, real dconf — not this session's. The prefs dialog is activated
+    # that way, which made it read the desktop's settings and ignore the
+    # session's. Sealing the activation environment keeps everything the bus
+    # starts inside the throwaway session.
+    dbus-update-activation-environment HOME XDG_DATA_HOME XDG_CONFIG_HOME \
+        XDG_CACHE_HOME GSETTINGS_BACKEND WAYLAND_DISPLAY GDK_BACKEND 2>/dev/null
+
     gnome-shell "${args[@]}" >"$SESSION_DIR/shell.log" 2>&1 &
     SHELL_PID=$!
 
